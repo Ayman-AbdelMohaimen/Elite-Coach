@@ -87,4 +87,4 @@ A revolutionary feature allowing users to hear *themselves* speaking fluently.
 
 ---
 
-*FluencyFlow v3.1 - Built with ❤️ and AI.*
+*English Doctor v3.1 - Built with ❤️ By Ayman AbdelMohaimen & AI.*

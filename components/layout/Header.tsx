@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Activity, Moon, Sun } from 'lucide-react';
+import { TRANSLATIONS } from '../../constants';
 
 interface HeaderProps {
   title: string;
@@ -27,9 +28,14 @@ export const Header: React.FC<HeaderProps> = ({
             <Activity className="w-7 h-7 text-emerald-600 dark:text-emerald-400 relative z-10 transform group-hover:scale-110 transition-transform" />
           </div>
           <div className="flex flex-col">
-            <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white leading-none">
-              {title}
-            </span>
+            <div className="flex items-baseline gap-2">
+                <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white leading-none">
+                {title}
+                </span>
+                <span className="hidden sm:inline-block text-[10px] text-slate-400 font-medium italic">
+                    {TRANSLATIONS[lang].slogan}
+                </span>
+            </div>
             <span className="text-[10px] uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-semibold">
               {subtitle}
             </span>

@@ -1,6 +1,37 @@
 
 import { DrillContent, SpeedQuestion, WarmupExercise, ShadowingContent } from "./types";
 
+export const PERSONAS = [
+  { 
+    id: 'business', 
+    label: 'Business Professional', 
+    labelAr: 'احترافي أعمال',
+    desc: 'Focus on clear, confident articulation for meetings.', 
+    descAr: 'التركيز على النطق الواضح والثقة للاجتماعات.' 
+  },
+  { 
+    id: 'developer', 
+    label: 'Software Developer', 
+    labelAr: 'مطور برمجيات',
+    desc: 'Focus on technical terms (API, Cache, SQL).', 
+    descAr: 'التركيز على المصطلحات التقنية (API, Cache, SQL).' 
+  },
+  { 
+    id: 'academic', 
+    label: 'Academic/Researcher', 
+    labelAr: 'باحث / أكاديمي',
+    desc: 'Focus on complex vocabulary and formal tone.', 
+    descAr: 'التركيز على المفردات المعقدة والنبرة الرسمية.' 
+  },
+  { 
+    id: 'kids', 
+    label: 'Kids & Fun', 
+    labelAr: 'أطفال ومرح',
+    desc: 'Simple sounds, fun tongue twisters.', 
+    descAr: 'أصوات بسيطة وجمل ممتعة.' 
+  }
+];
+
 export const COACH_PERSONA = `
 Role: You are an elite "Accent & Fluency Coach" specializing in correcting articulation mechanics (Phonetics), muscle memory, and English thinking speed.
 
@@ -20,10 +51,18 @@ Output Format:
 - Bold key terms.
 `;
 
+export const LEVELS = [
+  { level: 1, minXp: 0, label: "Novice Speaker", labelAr: "متحدث مبتدئ" },
+  { level: 5, minXp: 500, label: "Articulation Apprentice", labelAr: "متدرب مخارج" },
+  { level: 10, minXp: 1500, label: "Fluency Master", labelAr: "سيد الطلاقة" },
+  { level: 50, minXp: 10000, label: "Native-Like Legend", labelAr: "أسطورة" }
+];
+
 export const TRANSLATIONS = {
   en: {
     title: "FluencyFlow",
     subtitle: "Elite Coach v3.1",
+    slogan: "Master the Art of Speech",
     exit: "Exit Session",
     heroTitle: "Master Your",
     heroFlow: "Flow",
@@ -76,7 +115,7 @@ export const TRANSLATIONS = {
     artDiagnostic: "AI Diagnostic Test",
     artDiagnosticDesc: "Identify your weak points (TH, R/L, V/W) in one go.",
     artPairs: "Minimal Pairs",
-    artPairsDesc: "Fix P/B, F/V, S/Z confusion.",
+    artPairsDesc: "Fix P/B, F/V, S/Z.",
     artDrills: "Standard Drills",
     artDrillsDesc: "Practice core phonemes.",
     diagnosticText: "Please call Stella. Ask her to bring these things with her from the store: Six spoons of fresh snow peas, five thick slabs of blue cheese, and maybe a snack for her brother Bob. We also need a small plastic snake and a big toy frog for the kids. She can scoop these things into three red bags, and then we will go meet her at the train station.",
@@ -91,8 +130,11 @@ export const TRANSLATIONS = {
     warmupDesc: "Loosen jaw & tongue before training.",
     shadowingBtn: "Shadowing (Visemes)",
     shadowingDesc: "Listen, See, and Repeat instantly.",
+    gameBtn: "Cognitive Warm-up",
+    gameDesc: "Memory Match Game",
     startWarmup: "Start Warm-up",
     startShadowing: "Start Shadowing",
+    startGame: "Start Game",
     nextEx: "Next Exercise",
     finishWarmup: "Finish Warm-up",
     shadowingInst: "Listen to the audio, observe the mouth shape, and repeat immediately.",
@@ -116,15 +158,32 @@ export const TRANSLATIONS = {
     speedNormal: "Normal (1.0x)",
     speedFast: "Fast (1.25x)",
     testVoice: "Test Voice",
+    trainingPersona: "Training Persona",
+    selectPersona: "Select Persona",
+    savePref: "Save Preferences",
+    saved: "Saved!",
     // Footer
     footerText: "FluencyFlow AI. Elite Coaching System.",
     footerPrivacy: "Privacy Protocol",
     footerStatus: "System Status",
-    footerSettings: "Settings"
+    footerSettings: "Settings",
+    builtWith: "Built with ❤️ and AI",
+    // Gamification
+    level: "Level",
+    streak: "Streak",
+    day: "Day",
+    points: "XP",
+    nextLevel: "Next Level",
+    // Game
+    gameTitle: "Memory Match",
+    moves: "Moves",
+    pairs: "Pairs",
+    gameComplete: "Level Complete!"
   },
   ar: {
     title: "FluencyFlow",
     subtitle: "المدرب المتقدم v3.1",
+    slogan: "أتقن فن الكلام",
     exit: "إنهاء الجلسة",
     heroTitle: "أتقن",
     heroFlow: "طلاقتك",
@@ -192,8 +251,11 @@ export const TRANSLATIONS = {
     warmupDesc: "تليين الفك واللسان قبل التدريب.",
     shadowingBtn: "المحاكاة (Visemes)",
     shadowingDesc: "اسمع، شاهد، وردد فوراً.",
+    gameBtn: "تنشيط ذهني",
+    gameDesc: "لعبة تطابق الذاكرة",
     startWarmup: "ابدأ الإحماء",
     startShadowing: "ابدأ المحاكاة",
+    startGame: "ابدأ اللعبة",
     nextEx: "التمرين التالي",
     finishWarmup: "إنهاء الإحماء",
     shadowingInst: "استمع للصوت، لاحظ شكل الفم، وردد فوراً.",
@@ -217,11 +279,27 @@ export const TRANSLATIONS = {
     speedNormal: "طبيعي (1.0x)",
     speedFast: "سريع (1.25x)",
     testVoice: "تجربة الصوت",
+    trainingPersona: "شخصية التدريب",
+    selectPersona: "اختر الشخصية",
+    savePref: "حفظ الإعدادات",
+    saved: "تم الحفظ!",
     // Footer
     footerText: "نظام التدريب المتقدم FluencyFlow AI",
     footerPrivacy: "الخصوصية",
     footerStatus: "حالة النظام",
-    footerSettings: "الإعدادات"
+    footerSettings: "الإعدادات",
+    builtWith: "صُنع بـ ❤️ والذكاء الاصطناعي",
+    // Gamification
+    level: "المستوى",
+    streak: "أيام متتالية",
+    day: "يوم",
+    points: "نقاط",
+    nextLevel: "المستوى التالي",
+    // Game
+    gameTitle: "تطابق الذاكرة",
+    moves: "حركات",
+    pairs: "أزواج",
+    gameComplete: "اكتمل المستوى!"
   }
 };
 
@@ -235,7 +313,9 @@ export const MINIMAL_PAIRS_DRILLS: DrillContent[] = [
     focusAr: "الفرق بين P (دفعة هواء) و B (اهتزاز الحبال الصوتية)",
     guide: "Hold a tissue in front of your mouth. It should move for 'Pat/Pen' (P), but NOT for 'Big/Bag' (B).",
     guideAr: "ضع منديلاً أمام فمك. يجب أن يتحرك عند نطق 'Pat' (هواء)، ولكن لا يتحرك عند 'Bag' (اهتزاز).",
-    type: 'MINIMAL_PAIR'
+    type: 'MINIMAL_PAIR',
+    category: 'general',
+    viseme: 'p'
   },
   {
     id: 'mp-fv',
@@ -244,7 +324,9 @@ export const MINIMAL_PAIRS_DRILLS: DrillContent[] = [
     focusAr: "الفرق بين F (هواء فقط) و V (أزيز/اهتزاز)",
     guide: "Top teeth on bottom lip for BOTH. 'F' is just air. 'V' makes your lip tickle/buzz.",
     guideAr: "الأسنان العلوية على الشفة السفلية للاثنين. 'F' مجرد هواء. 'V' يجب أن تشعر بدغدغة في شفتك.",
-    type: 'MINIMAL_PAIR'
+    type: 'MINIMAL_PAIR',
+    category: 'general',
+    viseme: 'f'
   },
   {
     id: 'mp-sz',
@@ -253,78 +335,153 @@ export const MINIMAL_PAIRS_DRILLS: DrillContent[] = [
     focusAr: "الفرق بين S (فحيح الأفعى) و Z (طنين النحلة)",
     guide: "Tongue touches nothing. 'S' is whispered. 'Z' vibrates your throat.",
     guideAr: "اللسان لا يلمس شيئاً. 'S' هو همس. 'Z' يجعل حنجرتك تهتز.",
-    type: 'MINIMAL_PAIR'
-  },
-  {
-    id: 'mp-th-s',
-    text: "I think the sink will sink.",
-    focus: "TH (Tongue out) vs S (Tongue in)",
-    focusAr: "الفرق بين TH (اللسان خارجاً) و S (اللسان بالداخل)",
-    guide: "Stick tongue OUT for 'Think'. Keep tongue IN behind teeth for 'Sink'.",
-    guideAr: "أخرج لسانك للخارج في 'Think'. ابقه خلف الأسنان في 'Sink'.",
-    type: 'MINIMAL_PAIR'
+    type: 'MINIMAL_PAIR',
+    category: 'general',
+    viseme: 's'
   }
 ];
 
 export const PRONUNCIATION_DRILLS: DrillContent[] = [
-  // Group 1: TH Sounds (The Lisp Check)
+  // --- BUSINESS PERSONA DRILLS ---
+  {
+    id: 'bus-1',
+    text: "Let's touch base offline regarding the quarterly deliverables.",
+    focus: "Clear enunciation of multi-syllable words (Deliverables)",
+    focusAr: "نطق واضح للكلمات متعددة المقاطع",
+    guide: "Focus on the 'L' in deliverables and the 'S' at the end.",
+    guideAr: "ركز على حرف L في deliverables وحرف S في النهاية.",
+    category: 'business',
+    type: 'STANDARD',
+    viseme: 'l'
+  },
+  {
+    id: 'bus-2',
+    text: "We need to leverage our strategic advantages.",
+    focus: "V vs W (Leverage), Str- cluster (Strategic)",
+    focusAr: "الفرق بين V/W ومخارج Str",
+    guide: "Bite lip for 'Leverage'. Strong 'R' in Strategic.",
+    guideAr: "عض الشفة في Leverage. نطق R قوي في Strategic.",
+    category: 'business',
+    type: 'STANDARD',
+    viseme: 'f'
+  },
+
+  // --- DEVELOPER PERSONA DRILLS ---
+  {
+    id: 'dev-1',
+    text: "I need to debug this asynchronous function before deployment.",
+    focus: "Hard G (Debug), S-clusters (Async, Deploy)",
+    focusAr: "حرف G القوي (Debug) ومخارج S",
+    guide: "Don't rush 'Asynchronous'. Pronounce every syllable: A-syn-chro-nous.",
+    guideAr: "لا تتسرع في Asynchronous. انطق كل مقطع.",
+    category: 'developer',
+    type: 'STANDARD',
+    viseme: 'p'
+  },
+  {
+    id: 'dev-2',
+    text: "The API latency is causing a bottleneck in the backend.",
+    focus: "Acronyms (API), T sounds (Latency, Bottle)",
+    focusAr: "الاختصارات (API) وحرف T",
+    guide: "Say 'A-P-I' clearly. 'Bottleneck' has a sharp T (or glottal stop).",
+    guideAr: "قل A-P-I بوضوح. Bottleneck بها T حادة.",
+    category: 'developer',
+    type: 'STANDARD',
+    viseme: 'p'
+  },
+
+  // --- ACADEMIC PERSONA DRILLS ---
+  {
+    id: 'aca-1',
+    text: "The hypothesis was validated by empirical data.",
+    focus: "TH (Hypothesis), V (Validated), P (Empirical)",
+    focusAr: "مخارج TH, V, P",
+    guide: "Soft TH in Hypothesis. Explode the P in Empirical.",
+    guideAr: "TH ناعمة في Hypothesis. فجر حرف P في Empirical.",
+    category: 'academic',
+    type: 'STANDARD',
+    viseme: 'th'
+  },
+  {
+    id: 'aca-2',
+    text: "Significant correlation does not imply causation.",
+    focus: "S/Z sounds, Tion endings",
+    focusAr: "أصوات S/Z ونهايات Tion",
+    guide: "Sharp 'S' sounds. 'Tion' sounds like 'Shun'.",
+    guideAr: "أصوات S حادة. Tion تنطق Shun.",
+    category: 'academic',
+    type: 'STANDARD',
+    viseme: 's'
+  },
+
+  // --- KIDS PERSONA DRILLS ---
+  {
+    id: 'kid-1',
+    text: "The fluffy cat jumped over the moon.",
+    focus: "F (Fluffy), J (Jumped)",
+    focusAr: "حرف F وحرف J",
+    guide: "Blow air like a bunny for Fluffy. Jump your jaw for Jumped!",
+    guideAr: "انفخ الهواء مثل الأرنب في Fluffy. حرك فكك بقوة في Jumped.",
+    category: 'kids',
+    type: 'STANDARD',
+    viseme: 'f'
+  },
+  {
+    id: 'kid-2',
+    text: "Sally sells seashells by the seashore.",
+    focus: "S vs SH (The Snake and the Quiet Sound)",
+    focusAr: "الفرق بين S و SH",
+    guide: "Smile for S (Sally). Pucker lips for SH (Shells).",
+    guideAr: "ابتسم لحرف S. ضم شفتيك لحرف SH.",
+    category: 'kids',
+    type: 'STANDARD',
+    viseme: 's'
+  },
+
+  // --- GENERAL DRILLS ---
   {
     id: 'th-1',
     text: "Thinking about those three things.",
     focus: "TH Sound (Voiceless & Voiced)",
     focusAr: "صوت الـ TH (المهموس والمجهور)",
-    guide: "Stick your tongue OUT between your teeth. Bite it gently. Blow air for 'Thinking/Three' (Unvoiced). Vibrate vocal cords for 'Those' (Voiced). Do NOT use 'S' or 'Z'.",
-    guideAr: "أخرج طرف لسانك بين أسنانك وعضه بلطف. انفخ الهواء في 'Thinking'. اجعل الحبال الصوتية تهتز في 'Those'. لا تستخدم S أو Z.",
-    type: 'STANDARD'
+    guide: "Stick your tongue OUT between your teeth. Bite it gently.",
+    guideAr: "أخرج طرف لسانك بين أسنانك وعضه بلطف.",
+    type: 'STANDARD',
+    category: 'general',
+    viseme: 'th'
   },
-  // Group 2: R vs L (The Tongue Curl)
   {
     id: 'rl-1',
     text: "The red lorry rolled down the yellow lane.",
     focus: "R (Retroflex) vs L (Alveolar)",
     focusAr: "الفرق بين R (اللسان للخلف) و L (اللسان للأمام)",
-    guide: "For 'R': Curl tongue BACK, sides touching upper molars, tip touching NOTHING. For 'L': Tip of tongue touches just BEHIND the upper front teeth.",
-    guideAr: "لحرف R: لف لسانك للخلف دون لمس السقف. لحرف L: طرف اللسان يلمس المنطقة خلف الأسنان الأمامية العلوية مباشرة.",
-    type: 'STANDARD'
-  },
-  // Group 3: V vs W (The Lip Buzz)
-  {
-    id: 'vw-1',
-    text: "Very well, we will visit the village.",
-    focus: "V (Fricative) vs W (Glide)",
-    focusAr: "الفرق بين V (الأسنان على الشفة) و W (تدوير الشفاه)",
-    guide: "For 'V': Top teeth MUST bite bottom lip (Buzz). For 'W': Make a tight 'O' circle with lips, do NOT touch teeth to lip.",
-    guideAr: "لحرف V: عض الشفة السفلية بأسنانك (أزيز). لحرف W: دور شفتيك دائرة ضيقة (O) ولا تلمس الأسنان.",
-    type: 'STANDARD'
-  },
-  // Group 4: MPT (The Explosives)
-  {
-    id: 'mpt-1',
-    text: "Map the path to the top.",
-    focus: "M (Nasal), P (Plosive), T (Alveolar Stop)",
-    focusAr: "الأصوات الانفجارية (P, T) والأنفية (M)",
-    guide: "Press lips firmly for 'Map'. For 'Path', build air pressure behind lips and release explosively. For 'Top', tap tongue tip against the ridge behind upper teeth.",
-    guideAr: "اضغط الشفاه بقوة في 'Map'. في 'Path' اجمع الهواء خلف الشفاه وأطلقه بقوة (انفجار). في 'Top' اضرب طرف اللسان خلف الأسنان.",
-    type: 'STANDARD'
-  },
-  // Group 5: S vs Z (The Hiss vs Buzz)
-  {
-    id: 'sz-1',
-    text: "Lazy zebras sleep on soft grass.",
-    focus: "Z (Vibration) vs S (Hiss)",
-    focusAr: "الفرق بين Z (الاهتزاز) و S (الفحيح)",
-    guide: "Tongue position is identical for both. 'S' is silent air (Snake). 'Z' uses vocal cords (Bee buzzing). Feel your throat vibrate on 'Lazy' and 'Zebras'.",
-    guideAr: "وضعية اللسان متطابقة. 'S' هواء صامت. 'Z' يستخدم الحبال الصوتية. تحسس اهتزاز حنجرتك في 'Lazy'.",
-    type: 'STANDARD'
+    guide: "For 'R': Curl tongue BACK. For 'L': Tip of tongue touches behind teeth.",
+    guideAr: "لحرف R: لف لسانك للخلف. لحرف L: طرف اللسان يلمس خلف الأسنان.",
+    type: 'STANDARD',
+    category: 'general',
+    viseme: 'r'
   }
 ];
 
 export const SPEED_QUESTIONS: SpeedQuestion[] = [
-  { id: 'sq-1', question: "What is the last thing you bought and why?", questionAr: "ما هو آخر شيء اشتريته ولماذا؟" },
-  { id: 'sq-2', question: "Describe your morning routine in three sentences.", questionAr: "صف روتينك الصباحي في ثلاث جمل." },
-  { id: 'sq-3', question: "If you could travel anywhere right now, where would you go?", questionAr: "إذا كان بإمكانك السفر لأي مكان الآن، أين ستذهب؟" },
-  { id: 'sq-4', question: "What is your favorite way to relax after work?", questionAr: "ما هي طريقتك المفضلة للاسترخاء بعد العمل؟" },
-  { id: 'sq-5', question: "Tell me about a skill you want to learn.", questionAr: "أخبرني عن مهارة ترغب في تعلمها." }
+  // GENERAL
+  { id: 'sq-1', question: "What is the last thing you bought and why?", questionAr: "ما هو آخر شيء اشتريته ولماذا؟", category: 'general' },
+  { id: 'sq-2', question: "Describe your morning routine in three sentences.", questionAr: "صف روتينك الصباحي في ثلاث جمل.", category: 'general' },
+  
+  // BUSINESS
+  { id: 'sq-bus-1', question: "How would you handle a missed deadline?", questionAr: "كيف تتصرف إذا فاتك موعد نهائي؟", category: 'business' },
+  { id: 'sq-bus-2', question: "Pitch your current project in 10 seconds.", questionAr: "اعرض مشروعك الحالي في 10 ثوانٍ.", category: 'business' },
+
+  // DEVELOPER
+  { id: 'sq-dev-1', question: "Explain the difference between SQL and NoSQL.", questionAr: "اشرح الفرق بين SQL و NoSQL.", category: 'developer' },
+  { id: 'sq-dev-2', question: "How do you handle a serious bug in production?", questionAr: "كيف تتعامل مع خطأ برمجي خطير في الإنتاج؟", category: 'developer' },
+
+  // ACADEMIC
+  { id: 'sq-aca-1', question: "Summarize the main argument of the last article you read.", questionAr: "لخص الحجة الرئيسية لآخر مقال قرأته.", category: 'academic' },
+  
+  // KIDS
+  { id: 'sq-kid-1', question: "If you could have any superpower, what would it be?", questionAr: "لو كان عندك قوة خارقة، ماذا ستكون؟", category: 'kids' },
+  { id: 'sq-kid-2', question: "Tell me about your favorite animal.", questionAr: "اخبرني عن حيوانك المفضل.", category: 'kids' }
 ];
 
 export const WARMUP_EXERCISES: WarmupExercise[] = [
@@ -395,4 +552,11 @@ export const SHADOWING_DRILLS: ShadowingContent[] = [
     guide: "Tongue behind teeth, lips spread.",
     guideAr: "اللسان خلف الأسنان، الشفاه مفرودة."
   }
+];
+
+export const GAME_WORDS = [
+  { id: 'g1', word: 'Thorough', match: 'Careful', type: 'meaning' },
+  { id: 'g2', word: 'Rough', match: 'Not Smooth', type: 'meaning' },
+  { id: 'g3', word: 'Though', match: 'Although', type: 'meaning' },
+  { id: 'g4', word: 'Thought', match: 'Idea', type: 'meaning' },
 ];

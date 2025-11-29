@@ -17,7 +17,7 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
   referenceLabel = "Target Pattern"
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
 
   // Draw the "Target" waveform (Idealized)
   const drawReferenceWave = (ctx: CanvasRenderingContext2D, width: number, height: number) => {

@@ -1,8 +1,9 @@
 
 import React from 'react';
+import { VisemeType } from '../types';
 
 interface VisemeGuideProps {
-  focus: 'th' | 'r' | 'f' | 'l' | 'm' | 's';
+  focus: VisemeType;
   className?: string;
 }
 
@@ -49,6 +50,31 @@ export const VisemeGuide: React.FC<VisemeGuideProps> = ({ focus, className = '' 
              {/* Upper Teeth */}
              <path d="M140 140 L 140 180 L 160 180 L 160 140" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="2" />
           </>
+        );
+      case 's':
+        return (
+          <>
+             {/* Tongue Behind Teeth */}
+             <path d="M140 230 Q 170 230 175 210" fill="none" stroke="#F87171" strokeWidth="10" strokeLinecap="round" />
+             {/* Teeth Close */}
+             <path d="M140 140 L 140 190 L 160 190 L 160 140" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="2" />
+             <path d="M140 260 L 140 200 L 160 200 L 160 260" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="2" />
+          </>
+        );
+      case 'p':
+        return (
+          <>
+             {/* Lips Closed/Pressed */}
+             <path d="M140 190 Q 200 190 200 200" fill="none" stroke="#F87171" strokeWidth="12" />
+             <path d="M140 210 Q 200 210 200 200" fill="none" stroke="#F87171" strokeWidth="12" />
+          </>
+        );
+      case 'w':
+        return (
+           <>
+            {/* Lips Rounded */}
+             <ellipse cx="210" cy="200" rx="15" ry="25" fill="#F87171" />
+           </>
         );
       default:
         return (

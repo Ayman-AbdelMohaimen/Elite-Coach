@@ -37,8 +37,16 @@ export enum SessionState {
   TRANSCRIPTION_PROCESSING = 'TRANSCRIPTION_PROCESSING',
   TRANSCRIPTION_RESULT = 'TRANSCRIPTION_RESULT',
   
+  // Game States
+  GAME_INTRO = 'GAME_INTRO',
+  GAME_ACTIVE = 'GAME_ACTIVE',
+  GAME_COMPLETED = 'GAME_COMPLETED',
+  
   COMPLETED = 'COMPLETED',
 }
+
+export type UserPersona = 'business' | 'developer' | 'academic' | 'kids';
+export type VisemeType = 'th' | 'r' | 'f' | 'l' | 's' | 'p' | 'w';
 
 export interface FeedbackData {
   rawText: string;
@@ -60,12 +68,15 @@ export interface DrillContent {
   guide: string;
   guideAr?: string; // Arabic translation
   type?: 'STANDARD' | 'MINIMAL_PAIR';
+  category?: UserPersona | 'general';
+  viseme?: VisemeType;
 }
 
 export interface SpeedQuestion {
   id: string;
   question: string;
   questionAr?: string;
+  category?: UserPersona | 'general';
 }
 
 export interface WarmupExercise {
@@ -81,7 +92,21 @@ export interface WarmupExercise {
 export interface ShadowingContent {
   id: string;
   text: string;
-  visemeFocus: 'th' | 'r' | 'f' | 'l' | 'm' | 's'; 
+  visemeFocus: VisemeType; 
   guide: string;
   guideAr?: string;
+}
+
+export interface UserStats {
+  xp: number;
+  streak: number;
+  level: number;
+  lastTrainingDate: string | null; // ISO Date string
+}
+
+export interface Badge {
+  id: string;
+  label: string;
+  icon: string;
+  unlocked: boolean;
 }

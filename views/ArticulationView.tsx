@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { Activity, Stethoscope, LayoutGrid, Dumbbell, ChevronRight, RotateCcw, Zap, Mic, Square, CheckCircle2, ArrowLeft, Volume2 } from 'lucide-react';
 import { Button } from '../components/Button';
 import { AudioPlayer } from '../components/AudioPlayer';
-import { DrillContent, SessionState } from '../types';
+import { VisemeGuide } from '../components/VisemeGuide';
+import { DrillContent, SessionState, UserPersona } from '../types';
 import { MINIMAL_PAIRS_DRILLS, PRONUNCIATION_DRILLS } from '../constants';
 import { analyzeArticulationDrill } from '../services/geminiService';
 import ReactMarkdown from 'react-markdown';
@@ -22,11 +23,12 @@ interface Props {
   trainingMode: 'FULL' | 'SINGLE';
   onBackMenu: () => void;
   onComplete: () => void;
+  selectedPersona: UserPersona | null;
 }
 
 export const ArticulationView: React.FC<Props> = ({
   t, sessionState, setSessionState, audioRecorder, setShowReward, onPlayTTS, isPlayingTTS, lang,
-  activeDrillList, setActiveDrillList, trainingMode, onBackMenu, onComplete
+  activeDrillList, setActiveDrillList, trainingMode, onBackMenu, onComplete, selectedPersona
 }) => {
   const [currentDrillIndex, setCurrentDrillIndex] = useState(0);
   const [feedback, setFeedback] = useState('');
@@ -105,7 +107,7 @@ export const ArticulationView: React.FC<Props> = ({
   // --- Render Drill ---
   const drill = activeDrillList[currentDrillIndex];
   return (
-    <div className="max-w-2xl mx-auto w-full animate-float-up pt-10">
+    <div className="max-w-3xl mx-auto w-full animate-float-up pt-10">
       <div className="mb-8 flex items-center justify-between">
          <div className="flex items-center gap-3">
            {trainingMode === 'SINGLE' && <button onClick={onBackMenu}><ArrowLeft className="w-5 h-5 text-slate-500 rtl:rotate-180" /></button>}
@@ -114,13 +116,25 @@ export const ArticulationView: React.FC<Props> = ({
       </div>
       
       <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-[2rem] p-8 border border-slate-200/50 dark:border-slate-700/50 shadow-2xl mb-10 relative overflow-hidden">
-        <p className="text-3xl font-bold dark:text-white mb-8 leading-tight flex items-center gap-4" dir="ltr">
-           "{drill.text}"
-           <button onClick={() => onPlayTTS(drill.text)} className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-emerald-500 hover:text-white transition-all text-slate-400"><Volume2 className={`w-6 h-6 ${isPlayingTTS ? 'animate-pulse' : ''}`} /></button>
-        </p>
-        <div className="bg-slate-50/80 dark:bg-slate-950/50 rounded-2xl p-5 border border-slate-200 dark:border-slate-800/50">
-           <span className="text-[10px] font-bold text-cyan-500 uppercase tracking-wider block mb-1.5">{t.mechFocus}</span>
-           <p className="text-slate-600 dark:text-slate-300 text-sm font-medium">{lang === 'ar' && drill.focusAr ? drill.focusAr : drill.focus}</p>
+        <div className="flex flex-col md:flex-row gap-6 items-center">
+          <div className="flex-1">
+             <p className="text-3xl font-bold dark:text-white mb-8 leading-tight flex items-center gap-4" dir="ltr">
+                "{drill.text}"
+                <button onClick={() => onPlayTTS(drill.text)} className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-emerald-500 hover:text-white transition-all text-slate-400"><Volume2 className={`w-6 h-6 ${isPlayingTTS ? 'animate-pulse' : ''}`} /></button>
+             </p>
+             <div className="bg-slate-50/80 dark:bg-slate-950/50 rounded-2xl p-5 border border-slate-200 dark:border-slate-800/50">
+                <span className="text-[10px] font-bold text-cyan-500 uppercase tracking-wider block mb-1.5">{t.mechFocus}</span>
+                <p className="text-slate-600 dark:text-slate-300 text-sm font-medium">{lang === 'ar' && drill.focusAr ? drill.focusAr : drill.focus}</p>
+             </div>
+          </div>
+          
+          {/* Viseme Guide */}
+          {drill.viseme && (
+             <div className="flex-shrink-0 bg-white dark:bg-slate-800 p-4 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-lg flex flex-col items-center">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">{t.visemeGuide}</span>
+                <VisemeGuide focus={drill.viseme} className="scale-110" />
+             </div>
+          )}
         </div>
       </div>
 

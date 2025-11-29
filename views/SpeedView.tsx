@@ -1,10 +1,8 @@
-
 import React, { useState } from 'react';
 import { Zap, Mic, Square, RotateCcw, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { Button } from '../components/Button';
 import { AudioPlayer } from '../components/AudioPlayer';
-import { SessionState } from '../types';
-import { SPEED_QUESTIONS } from '../constants';
+import { SessionState, SpeedQuestion, UserPersona } from '../types';
 import { analyzeSpeedDrill } from '../services/geminiService';
 import ReactMarkdown from 'react-markdown';
 
@@ -16,9 +14,11 @@ interface Props {
   setShowReward: (b: boolean) => void;
   lang: 'en' | 'ar';
   onComplete: () => void;
+  activeQuestions: SpeedQuestion[];
+  selectedPersona: UserPersona | null;
 }
 
-export const SpeedView: React.FC<Props> = ({ t, sessionState, setSessionState, audioRecorder, setShowReward, lang, onComplete }) => {
+export const SpeedView: React.FC<Props> = ({ t, sessionState, setSessionState, audioRecorder, setShowReward, lang, onComplete, activeQuestions, selectedPersona }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [feedback, setFeedback] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -29,7 +29,7 @@ export const SpeedView: React.FC<Props> = ({ t, sessionState, setSessionState, a
     setIsAnalyzing(true);
     try {
       const base64 = await audioRecorder.blobToBase64(audioRecorder.audioBlob);
-      const q = SPEED_QUESTIONS[currentIndex];
+      const q = activeQuestions[currentIndex];
       const res = await analyzeSpeedDrill(base64, q.question, audioRecorder.audioBlob.type, lang);
       setFeedback(res);
       setSessionState(SessionState.SPEED_FEEDBACK);
@@ -38,11 +38,11 @@ export const SpeedView: React.FC<Props> = ({ t, sessionState, setSessionState, a
     setIsAnalyzing(false);
   };
 
-  const question = SPEED_QUESTIONS[currentIndex];
+  const question = activeQuestions[currentIndex];
   return (
     <div className="max-w-2xl mx-auto w-full animate-float-up pt-10">
          <div className="mb-8 flex items-center justify-between">
-          <span className="text-xs font-bold tracking-wider font-mono text-cyan-500 bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 rounded-full">{t.phase2} | {currentIndex + 1} / {SPEED_QUESTIONS.length}</span>
+          <span className="text-xs font-bold tracking-wider font-mono text-cyan-500 bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 rounded-full">{t.phase2} | {currentIndex + 1} / {activeQuestions.length}</span>
         </div>
         <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-[2rem] p-8 md:p-10 border border-slate-200/50 dark:border-slate-700/50 shadow-2xl mb-10 relative overflow-hidden">
           <h3 className="text-xs text-slate-400 uppercase tracking-[0.2em] font-bold mb-4">{t.rapidQ}</h3>
@@ -58,7 +58,7 @@ export const SpeedView: React.FC<Props> = ({ t, sessionState, setSessionState, a
           {sessionState === SessionState.SPEED_FEEDBACK && (
             <div className="w-full animate-float-up">
                <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-3xl p-8 mb-8"><h3 className="flex items-center text-cyan-500 font-bold mb-6"><CheckCircle2 className="w-5 h-5 mr-2" />{t.feedback}</h3><div className="prose prose-invert prose-sm"><ReactMarkdown>{feedback}</ReactMarkdown></div></div>
-               <div className="flex flex-col items-center w-full"><AudioPlayer audioUrl={audioRecorder.audioUrl} label="Answer" visualizerLabel="" referenceLabel="" /><div className="flex gap-4 justify-center pb-8"><Button variant="secondary" onClick={() => { audioRecorder.resetRecording(); setSessionState(SessionState.SPEED_INTRO); }}>{t.retry}</Button><Button variant="primary" onClick={() => { if(currentIndex < SPEED_QUESTIONS.length-1) { setCurrentIndex(p=>p+1); setSessionState(SessionState.SPEED_INTRO); } else onComplete(); }} className="!bg-cyan-500">{currentIndex < SPEED_QUESTIONS.length - 1 ? t.nextRound : "Complete"}</Button></div></div>
+               <div className="flex flex-col items-center w-full"><AudioPlayer audioUrl={audioRecorder.audioUrl} label="Answer" visualizerLabel="" referenceLabel="" /><div className="flex gap-4 justify-center pb-8"><Button variant="secondary" onClick={() => { audioRecorder.resetRecording(); setSessionState(SessionState.SPEED_INTRO); }}>{t.retry}</Button><Button variant="primary" onClick={() => { if(currentIndex < activeQuestions.length-1) { setCurrentIndex(p=>p+1); setSessionState(SessionState.SPEED_INTRO); } else onComplete(); }} className="!bg-cyan-500">{currentIndex < activeQuestions.length - 1 ? t.nextRound : "Complete"}</Button></div></div>
             </div>
           )}
         </div>
