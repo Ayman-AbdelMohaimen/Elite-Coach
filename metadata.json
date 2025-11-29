@@ -1,0 +1,7 @@
+{
+  "name": "FluencyFlow: Elite Accent Coach",
+  "description": "An elite AI coach for correcting MPT clusters and improving English thinking speed through precision drills and cognitive recall training.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
