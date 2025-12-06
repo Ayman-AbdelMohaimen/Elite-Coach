@@ -6,7 +6,7 @@
 
 ![Version](https://img.shields.io/badge/version-3.1.0-emerald)
 ![Tech Stack](https://img.shields.io/badge/stack-React_19_|_TypeScript_|_Vite-blue)
-![AI Engine](https://img.shields.io/badge/AI-Google_Gemini_2.5-orange)
+![AI Engine](https://img.shields.io/badge/AI-Google_Gemini_3Pro-orange)
 
 ## 📖 Overview
 
