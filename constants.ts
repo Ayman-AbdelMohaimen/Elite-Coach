@@ -1,36 +1,55 @@
 
-import { DrillContent, SpeedQuestion, WarmupExercise, ShadowingContent } from "./types";
+import { DrillContent, SpeedQuestion, WarmupExercise, ShadowingContent, KeywordChallenge, UserPersona, VocabCategory, AvatarConfig } from "./types";
 
-export const PERSONAS = [
+export const PERSONAS: { id: string; label: string; labelAr: string; desc: string; descAr: string; avatar: AvatarConfig }[] = [
   { 
     id: 'business', 
     label: 'Business Professional', 
     labelAr: 'احترافي أعمال',
-    desc: 'Focus on clear, confident articulation for meetings.', 
-    descAr: 'التركيز على النطق الواضح والثقة للاجتماعات.' 
+    desc: 'Negotiation, Leadership, & Diplomacy.', 
+    descAr: 'التفاوض، القيادة، والدبلوماسية.',
+    avatar: { style: 'avataaars', seed: 'BusinessMan' }
   },
   { 
     id: 'developer', 
     label: 'Software Developer', 
     labelAr: 'مطور برمجيات',
-    desc: 'Focus on technical terms (API, Cache, SQL).', 
-    descAr: 'التركيز على المصطلحات التقنية (API, Cache, SQL).' 
+    desc: 'Standups, Tech Reviews, & Architecture.', 
+    descAr: 'اجتماعات الفريق، المراجعات التقنية، والهيكلة.',
+    avatar: { style: 'avataaars', seed: 'DevGeek' }
   },
   { 
     id: 'academic', 
     label: 'Academic/Researcher', 
     labelAr: 'باحث / أكاديمي',
-    desc: 'Focus on complex vocabulary and formal tone.', 
-    descAr: 'التركيز على المفردات المعقدة والنبرة الرسمية.' 
+    desc: 'Thesis Defense, Lectures, & Logic.', 
+    descAr: 'مناقشة الرسائل، المحاضرات، والمنطق.',
+    avatar: { style: 'avataaars', seed: 'Professor' }
   },
   { 
     id: 'kids', 
     label: 'Kids & Fun', 
     labelAr: 'أطفال ومرح',
-    desc: 'Simple sounds, fun tongue twisters.', 
-    descAr: 'أصوات بسيطة وجمل ممتعة.' 
+    desc: 'Adventures, Animals, & Magic.', 
+    descAr: 'مغامرات، حيوانات، وسحر.',
+    avatar: { style: 'avataaars', seed: 'Kiddo' }
   }
 ];
+
+export const AGENT_SYSTEM_PROMPT = `
+You are "FluencyFlow Agent", a friendly, empathetic, and highly skilled linguistic therapist.
+Your goal is to have a natural conversation with the user while subtly correcting their pronunciation and grammar.
+- Start by asking how their day was or what they are working on (based on their persona).
+- Listen to their input.
+- Reply with empathy first (connect emotionally).
+- Then, provide 1-2 specific, gentle corrections regarding their pronunciation or grammar.
+- Keep responses short (under 40 words) to maintain flow.
+`;
+
+export const AGENT_PROMPTS = {
+  GREETING: "Hello! How can I help you improve your English today?",
+  GREETING_AR: "مرحباً! كيف يمكنني مساعدتك في تحسين لغتك الإنجليزية اليوم؟"
+};
 
 export const COACH_PERSONA = `
 Role: You are an elite "Accent & Fluency Coach" specializing in correcting articulation mechanics (Phonetics), muscle memory, and English thinking speed.
@@ -44,6 +63,7 @@ Protocol:
 - Be strict but encouraging.
 - Focus heavily on the physical mechanics (e.g., "Your tongue wasn't between your teeth for the TH").
 - Keep feedback concise and actionable.
+- ADAPT OUTPUT LANGUAGE: If the user requests Arabic, provide the explanation in Arabic but keep English terms like "TH", "P", "R" in English.
 
 Output Format:
 - STRICTLY use Markdown.
@@ -52,10 +72,264 @@ Output Format:
 `;
 
 export const LEVELS = [
-  { level: 1, minXp: 0, label: "Novice Speaker", labelAr: "متحدث مبتدئ" },
-  { level: 5, minXp: 500, label: "Articulation Apprentice", labelAr: "متدرب مخارج" },
-  { level: 10, minXp: 1500, label: "Fluency Master", labelAr: "سيد الطلاقة" },
-  { level: 50, minXp: 10000, label: "Native-Like Legend", labelAr: "أسطورة" }
+  { level: 1, minXp: 0, label: "Novice", labelAr: "مبتدئ" },
+  { level: 5, minXp: 500, label: "Apprentice", labelAr: "متدرب" },
+  { level: 10, minXp: 1500, label: "Master", labelAr: "محترف" },
+  { level: 50, minXp: 10000, label: "Legend", labelAr: "أسطورة" }
+];
+
+export const DIAGNOSTIC_TEXT = "Please call Stella. Ask her to bring these things with her from the store: Six spoons of fresh snow peas, five thick slabs of blue cheese, and maybe a snack for her brother Bob. We also need a small plastic snake and a big toy frog for the kids. She can scoop these things into three red bags, and then we will go meet her at the train station.";
+
+export const MINIMAL_PAIRS_DRILLS: DrillContent[] = [
+  {
+    id: 'p_b',
+    title: 'P vs B',
+    titleAr: 'الفرق بين P و B',
+    text: "Pack the bags before back tracking.",
+    focus: "Explosive 'P' (Air puff) vs Voiced 'B' (Vibration).",
+    focusAr: "الـ P انفجارية (هواء) والـ B مهتزة.",
+    guide: "Hold a paper. P moves it, B doesn't.",
+    type: 'MINIMAL_PAIR',
+    category: 'general',
+    viseme: 'p'
+  },
+  {
+    id: 'f_v',
+    title: 'F vs V',
+    titleAr: 'الفرق بين F و V',
+    text: "Five vines flourish very fast.",
+    focus: "Top teeth on bottom lip. F is silent, V vibrates.",
+    focusAr: "الأسنان العليا على الشفة السفلى. F صامتة، V مهتزة.",
+    guide: "Feel the buzz on your lip for V.",
+    type: 'MINIMAL_PAIR',
+    category: 'general',
+    viseme: 'f'
+  },
+  {
+    id: 'th_s',
+    title: 'TH vs S',
+    titleAr: 'الفرق بين TH و S',
+    text: "Thinking of sinking in the thick sea.",
+    focus: "Tongue OUT for TH. Tongue IN for S.",
+    focusAr: "اللسان خارج الأسنان للـ TH، وداخلها للـ S.",
+    guide: "Don't hide your tongue for TH.",
+    type: 'MINIMAL_PAIR',
+    category: 'general',
+    viseme: 'th'
+  }
+];
+
+export const PRONUNCIATION_DRILLS: DrillContent[] = [
+  // Developer Scenarios
+  {
+    id: 'dev_1',
+    title: 'Scenario: Daily Standup',
+    titleAr: 'سيناريو: الاجتماع اليومي',
+    text: "I patched the bug, deployed the fix, and updated the ticket.",
+    focus: "Past tense endings (-ed) and clarity.",
+    focusAr: "نهايات الماضي (-ed) والوضوح.",
+    guide: "Patched (t), Deployed (d), Updated (id).",
+    category: 'developer',
+    viseme: 'p'
+  },
+  {
+    id: 'dev_2',
+    title: 'Scenario: Architecture Defense',
+    titleAr: 'سيناريو: مناقشة الهيكلة',
+    text: "We chose PostgreSQL for data integrity regarding ACID compliance.",
+    focus: "Tech acronyms and flow.",
+    focusAr: "المصطلحات التقنية والانسيابية.",
+    guide: "Stress 'Post', 'SQL', and 'ACID'.",
+    category: 'developer',
+    viseme: 's'
+  },
+  // Business Scenarios
+  {
+    id: 'bus_1',
+    title: 'Scenario: Negotiation',
+    titleAr: 'سيناريو: التفاوض',
+    text: "I see your point, however, we need to consider the ROI first.",
+    focus: "Polite pushback tone and R sounds.",
+    focusAr: "نبرة الاعتراض المؤدب ومخارج الـ R.",
+    guide: "Soft R in 'However', Strong R in 'ROI'.",
+    category: 'business',
+    viseme: 'r'
+  },
+  // Academic Scenarios
+  {
+    id: 'acad_1',
+    title: 'Scenario: Methodology',
+    titleAr: 'سيناريو: المنهجية',
+    text: "The qualitative data suggests a strong correlation, not causality.",
+    focus: "Multi-syllabic words and rhythm.",
+    focusAr: "الكلمات متعددة المقاطع والإيقاع.",
+    guide: "Tap the rhythm: Qua-li-ta-tive.",
+    category: 'academic',
+    viseme: 'l'
+  },
+  // Kids
+  {
+    id: 'kid_1',
+    title: 'Scenario: Jungle Adventure',
+    titleAr: 'سيناريو: مغامرة الغابة',
+    text: "The snake says Ssss and the bee says Zzzz!",
+    focus: "S vs Z sounds.",
+    focusAr: "الفرق بين صوت الثعبان والنحلة.",
+    guide: "S is hiss, Z is buzz.",
+    category: 'kids',
+    viseme: 's'
+  }
+];
+
+export const SPEED_QUESTIONS: SpeedQuestion[] = [
+  { id: 'q1', question: "How do you handle a serious bug in production?", category: 'developer' },
+  { id: 'q2', question: "Why should we choose your company?", category: 'business' },
+  { id: 'q3', question: "Explain your research hypothesis.", category: 'academic' },
+  { id: 'q4', question: "What is your favorite animal and why?", category: 'kids' },
+  { id: 'q5', question: "Tell me about yourself in one sentence.", category: 'general' }
+];
+
+export const WARMUP_EXERCISES: WarmupExercise[] = [
+  { id: 'w1', title: 'Jaw Drop', titleAr: 'تحرير الفك', instruction: 'Open your mouth wide as if yawning, then relax. Repeat slowly.', instructionAr: 'افتح فمك كأنك تتثاءب ثم استرخ.', duration: 15, icon: 'jaw' },
+  { id: 'w2', title: 'Lip Trills', titleAr: 'اهتزاز الشفاه', instruction: 'Blow air through your lips to make them vibrate (Brrrr sound).', instructionAr: 'انفخ الهواء عبر شفتيك لتهتز (صوت برررر).', duration: 15, icon: 'lips' },
+  { id: 'w3', title: 'Tongue Stretch', titleAr: 'إطالة اللسان', instruction: 'Stick your tongue out as far as possible, then pull it back.', instructionAr: 'أخرج لسانك لأقصى حد ثم اسحبه للداخل.', duration: 15, icon: 'tongue' }
+];
+
+export const SHADOWING_DRILLS: ShadowingContent[] = [
+  { id: 's1', text: "Success is not final, failure is not fatal.", visemeFocus: 'f', guide: "Focus on F/V vibration." },
+  { id: 's2', text: "The quick brown fox jumps over the lazy dog.", visemeFocus: 'th', guide: "Classic pangram for all sounds." },
+  { id: 's3', text: "She sells seashells by the seashore.", visemeFocus: 's', guide: "S vs SH distinction." }
+];
+
+export const GAME_WORDS = [
+  { id: '1', word: 'Think', match: 'Thought' },
+  { id: '2', word: 'Speak', match: 'Spoke' },
+  { id: '3', word: 'Write', match: 'Wrote' },
+  { id: '4', word: 'Read', match: 'Read' },
+  { id: '5', word: 'Teach', match: 'Taught' },
+  { id: '6', word: 'Buy', match: 'Bought' }
+];
+
+export const KEYWORD_CHALLENGES: Record<string, KeywordChallenge[]> = {
+  developer: [
+    { 
+      id: 'k1', word: 'Kubernetes', phonetics: '/ˌkjuːbərˈnɛtiz/', 
+      definition: 'Container orchestration system.', definitionAr: 'نظام تنسيق الحاويات.',
+      context: "We deploy our microservices on a Kubernetes cluster.", contextAr: "ننشر خدماتنا المصغرة على مجموعة Kubernetes.",
+      difficulty: 'Elite' 
+    },
+    { 
+      id: 'k2', word: 'Idempotency', phonetics: '/ˌaɪdəmˈpoʊtənsi/', 
+      definition: 'Property of certain operations.', definitionAr: 'خاصية لبعض العمليات تضمن نفس النتيجة عند التكرار.',
+      context: "Ensure the API endpoint guarantees idempotency to prevent duplicate charges.", contextAr: "تأكد من أن نقطة نهاية API تضمن التكرار لمنع الرسوم المكررة.",
+      difficulty: 'Master' 
+    }
+  ],
+  business: [
+    { 
+      id: 'k3', word: 'Entrepreneurship', phonetics: '/ˌɒntrəprəˈnɜːʃɪp/', 
+      definition: 'Setting up a business.', definitionAr: 'ريادة الأعمال.',
+      context: "Entrepreneurship requires resilience and vision.", contextAr: "تتطلب ريادة الأعمال المرونة والرؤية.",
+      difficulty: 'Legend' 
+    },
+    { 
+      id: 'k4', word: 'Synergy', phonetics: '/ˈsɪnərdʒi/', 
+      definition: 'Cooperation of two or more agents.', definitionAr: 'تضافر الجهود.',
+      context: "The synergy between the two teams improved efficiency.", contextAr: "أدى التآزر بين الفريقين إلى تحسين الكفاءة.",
+      difficulty: 'Master' 
+    }
+  ],
+  academic: [
+    { 
+      id: 'k5', word: 'Methodology', phonetics: '/ˌmɛθəˈdɒlədʒi/', 
+      definition: 'System of methods used in a particular area.', definitionAr: 'المنهجية.',
+      context: "The research methodology was rigorously peer-reviewed.", contextAr: "تمت مراجعة منهجية البحث بدقة من قبل النظراء.",
+      difficulty: 'Elite' 
+    }
+  ],
+  kids: [
+    { 
+      id: 'k6', word: 'Tyrannosaurus', phonetics: '/tɪˌrænəˈsɔːrəs/', 
+      definition: 'A large dinosaur.', definitionAr: 'ديناصور ضخم.',
+      context: "The Tyrannosaurus Rex is the king of dinosaurs.", contextAr: "الديناصور ريكس هو ملك الديناصورات.",
+      difficulty: 'Legend' 
+    }
+  ]
+};
+
+export const VOCAB_CATEGORIES: VocabCategory[] = [
+  {
+    id: 'greetings',
+    title: 'Greetings',
+    titleAr: 'التحيات',
+    icon: '👋',
+    words: [
+      { id: 'v1', text: 'Hello', translation: 'مرحباً', emoji: '👋' },
+      { id: 'v2', text: 'Good Morning', translation: 'صباح الخير', emoji: '☀️' },
+      { id: 'v3', text: 'How are you?', translation: 'كيف حالك؟', emoji: '🤝' },
+      { id: 'v4', text: 'Nice to meet you', translation: 'تشرفت بلقائك', emoji: '😊' }
+    ]
+  },
+  {
+    id: 'travel',
+    title: 'Travel',
+    titleAr: 'السفر',
+    icon: '✈️',
+    words: [
+      { id: 'v5', text: 'Airport', translation: 'مطار', emoji: '🛫' },
+      { id: 'v6', text: 'Ticket', translation: 'تذكرة', emoji: '🎫' },
+      { id: 'v7', text: 'Hotel', translation: 'فندق', emoji: '🏨' },
+      { id: 'v8', text: 'Passport', translation: 'جواز سفر', emoji: '🛂' }
+    ]
+  },
+  {
+    id: 'food',
+    title: 'Food',
+    titleAr: 'الطعام',
+    icon: '🍔',
+    words: [
+      { id: 'v9', text: 'Restaurant', translation: 'مطعم', emoji: '🍽️' },
+      { id: 'v10', text: 'Water', translation: 'ماء', emoji: '💧' },
+      { id: 'v11', text: 'Delicious', translation: 'لذيذ', emoji: '😋' },
+      { id: 'v12', text: 'Menu', translation: 'قائمة طعام', emoji: '📜' }
+    ]
+  },
+  {
+    id: 'body',
+    title: 'Body Parts',
+    titleAr: 'أعضاء الجسم',
+    icon: '💪',
+    words: [
+      { id: 'v13', text: 'Head', translation: 'رأس', emoji: '🙂' },
+      { id: 'v14', text: 'Arm', translation: 'ذراع', emoji: '💪' },
+      { id: 'v15', text: 'Leg', translation: 'ساق', emoji: '🦵' },
+      { id: 'v16', text: 'Hand', translation: 'يد', emoji: '✋' }
+    ]
+  },
+  {
+    id: 'pronouns',
+    title: 'Pronouns',
+    titleAr: 'الضمائر',
+    icon: '👉',
+    words: [
+      { id: 'v17', text: 'I', translation: 'أنا', emoji: '🙋' },
+      { id: 'v18', text: 'You', translation: 'أنت', emoji: '🫵' },
+      { id: 'v19', text: 'He', translation: 'هو', emoji: '👨' },
+      { id: 'v20', text: 'She', translation: 'هي', emoji: '👩' }
+    ]
+  },
+  {
+    id: 'prepositions',
+    title: 'Prepositions',
+    titleAr: 'حروف الجر',
+    icon: '📦',
+    words: [
+      { id: 'v21', text: 'In', translation: 'في', emoji: '📥' },
+      { id: 'v22', text: 'On', translation: 'على', emoji: '🔛' },
+      { id: 'v23', text: 'Under', translation: 'تحت', emoji: '⬇️' },
+      { id: 'v24', text: 'Next to', translation: 'بجانب', emoji: '➡️' }
+    ]
+  }
 ];
 
 export const TRANSLATIONS = {
@@ -63,25 +337,25 @@ export const TRANSLATIONS = {
     title: "FluencyFlow",
     subtitle: "Elite Coach v3.1",
     slogan: "Master the Art of Speech",
-    exit: "Exit Session",
+    exit: "Exit",
     heroTitle: "Master Your",
     heroFlow: "Flow",
-    heroDesc: "Combine precise Articulation Mechanics with Cognitive Recall speed training. Your elite AI coach is ready to analyze your muscle memory and thinking speed.",
-    startBtn: "Start Training Session",
-    phase1: "Phase 1: Articulation Lab",
-    phase2: "Phase 2: Speed & Cognitive Recall",
+    heroDesc: "Combine precise Articulation Mechanics with Cognitive Recall speed training.",
+    startBtn: "Start Daily Session",
+    phase1: "Articulation Lab",
+    phase2: "Speed & Recall",
     targetPhrase: "Target Phrase",
     mechFocus: "Articulation Focus",
     recordDrill: "Record Drill",
     recording: "Recording...",
-    stop: "Stop Recording",
+    stop: "Stop",
     retry: "Retry",
-    analyze: "Analyze Mechanics",
+    analyze: "Analyze",
     feedback: "Coach's Feedback",
-    nextPhase: "Phase 2: Cognitive Recall",
+    nextPhase: "Next Phase",
     rapidQ: "Rapid Fire Question",
     goalSpeed: "Goal: < 5 Seconds",
-    speedInstruction: "Answer in a full sentence immediately. Don't translate.",
+    speedInstruction: "Answer in a full sentence immediately.",
     recordAns: "Record Answer",
     analyzeSpeed: "Analyze Speed",
     nextRound: "Next Drill",
@@ -91,7 +365,6 @@ export const TRANSLATIONS = {
     navDrill: "Drills",
     navSettings: "Profile",
     coach: "Coach",
-    // Transcription
     transcribeBtn: "Speech to Text",
     transcribeTitle: "AI Transcription",
     transcribeDesc: "Convert speech to text instantly.",
@@ -101,462 +374,193 @@ export const TRANSLATIONS = {
     copy: "Copy Text",
     copied: "Copied!",
     listen: "Listen to Example",
-    accuracyScore: "Phonetic Accuracy",
-    intonationScore: "Intonation & Stress",
-    // Modules
-    modMPT: "Articulation Lab",
-    modMuscle: "Muscle Memory",
-    modSpeed: "Thinking Speed",
-    modDescMPT: "Phonetics & Diagnostics",
-    modDescMuscle: "Gym for your Mouth",
+    accuracyScore: "Accuracy",
+    intonationScore: "Intonation",
+    modMPT: "Articulation",
+    modMuscle: "Muscle Gym",
+    modSpeed: "Speed",
+    modStudy: "Study Lab",
+    modVocab: "Foundations",
+    modDescMPT: "Phonetics",
+    modDescMuscle: "Warmup & Shadowing",
     modDescSpeed: "Cognitive Recall",
-    // Articulation Menu
+    modDescStudy: "Analyze Any Text",
+    modDescVocab: "Zero-G (Beginners)",
     artMenuTitle: "Articulation Lab",
-    artDiagnostic: "AI Diagnostic Test",
-    artDiagnosticDesc: "Identify your weak points (TH, R/L, V/W) in one go.",
+    artDiagnostic: "Diagnostic Test",
+    artDiagnosticDesc: "Find weak points (TH, R/L, V/W).",
     artPairs: "Minimal Pairs",
     artPairsDesc: "Fix P/B, F/V, S/Z.",
-    artDrills: "Standard Drills",
-    artDrillsDesc: "Practice core phonemes.",
-    diagnosticText: "Please call Stella. Ask her to bring these things with her from the store: Six spoons of fresh snow peas, five thick slabs of blue cheese, and maybe a snack for her brother Bob. We also need a small plastic snake and a big toy frog for the kids. She can scoop these things into three red bags, and then we will go meet her at the train station.",
+    artDrills: "Scenario Drills",
+    artDrillsDesc: "Real-world situations.",
+    artHacking: "Keyword Hacking",
+    artHackingDesc: "Master elite terminology.",
+    diagnosticText: DIAGNOSTIC_TEXT,
     diagnosticPrompt: "Read the text below naturally. The AI will analyze every sound.",
     diagnosticResult: "Diagnostic Results",
     weaknesses: "Detected Weaknesses",
     recPlan: "Recommended Plan",
     startPlan: "Start Customized Plan",
-    // Muscle Memory
     muscleMenuTitle: "Muscle Memory Gym",
     warmupBtn: "Warm-up Circuit",
-    warmupDesc: "Loosen jaw & tongue before training.",
-    shadowingBtn: "Shadowing (Visemes)",
-    shadowingDesc: "Listen, See, and Repeat instantly.",
-    gameBtn: "Cognitive Warm-up",
-    gameDesc: "Memory Match Game",
+    warmupDesc: "Loosen jaw & tongue.",
+    shadowingBtn: "Chat Agent (Shadowing)",
+    shadowingDesc: "Live conversation with AI.",
+    gameBtn: "Cognitive Game",
+    gameDesc: "Memory Match",
     startWarmup: "Start Warm-up",
-    startShadowing: "Start Shadowing",
+    startShadowing: "Start Chat",
     startGame: "Start Game",
-    nextEx: "Next Exercise",
-    finishWarmup: "Finish Warm-up",
-    shadowingInst: "Listen to the audio, observe the mouth shape, and repeat immediately.",
+    nextEx: "Next",
+    finishWarmup: "Finish",
+    shadowingInst: "Listen, observe, and repeat.",
     visemeGuide: "Visual Guide",
-    sideView: "Side View",
-    listenNative: "Listen to Native Audio",
-    backMenu: "Back to Menu",
-    backHome: "Back to Home",
-    waveformTitle: "Your Waveform",
-    referenceWave: "Ideal Pattern",
-    // Settings
     settingsTitle: "Settings",
+    trainingPersona: "Training Persona",
+    selectPersona: "Select Persona",
     audioPref: "Audio Preferences",
+    engineType: "TTS Engine",
+    engineBrowser: "Browser (Fast)",
+    engineGemini: "Gemini (Realistic)",
     voiceGender: "Voice Gender",
     voiceMale: "Male",
     voiceFemale: "Female",
-    voiceClone: "My Voice Clone",
-    comingSoon: "Soon",
     playbackSpeed: "Playback Speed",
-    speedSlow: "Slow (0.75x)",
-    speedNormal: "Normal (1.0x)",
-    speedFast: "Fast (1.25x)",
     testVoice: "Test Voice",
-    trainingPersona: "Training Persona",
-    selectPersona: "Select Persona",
     savePref: "Save Preferences",
     saved: "Saved!",
-    // Footer
-    footerText: "FluencyFlow AI. Elite Coaching System.",
-    footerPrivacy: "Privacy Protocol",
-    footerStatus: "System Status",
-    footerSettings: "Settings",
-    builtWith: "Built with ❤️ and AI",
-    // Gamification
-    level: "Level",
-    streak: "Streak",
-    day: "Day",
-    points: "XP",
-    nextLevel: "Next Level",
-    // Game
+    backHome: "Back to Home",
+    backMenu: "Back to Menu",
+    vocabTitle: "Foundations: Zero-G",
+    vocabDesc: "Essential vocabulary for absolute beginners.",
+    studyTitle: "Study Lab",
+    studyDesc: "Visualize any text as an infographic.",
+    pasteText: "Paste your text here...",
     gameTitle: "Memory Match",
     moves: "Moves",
     pairs: "Pairs",
-    gameComplete: "Level Complete!"
+    gameComplete: "Game Complete!",
+    level: "Level",
+    points: "Points",
+    energy: "Energy",
+    streak: "Streak",
+    listenNative: "Listen to Native",
+    referenceWave: "Reference Pattern",
+    noEnergy: "Not enough energy! Wait for refill."
   },
   ar: {
     title: "FluencyFlow",
-    subtitle: "المدرب المتقدم v3.1",
-    slogan: "أتقن فن الكلام",
-    exit: "إنهاء الجلسة",
+    subtitle: "المدرب المتقدم V3.1",
+    slogan: "أتقن فن الحديث",
+    exit: "خروج",
     heroTitle: "أتقن",
     heroFlow: "طلاقتك",
-    heroDesc: "اجمع بين دقة مخارج الحروف (Articulation) وتدريب سرعة الاستدعاء الذهني. مدرب الذكاء الاصطناعي جاهز لتحليل ذاكرتك العضلية وسرعة تفكيرك.",
-    startBtn: "ابدأ التدريب",
-    phase1: "المرحلة 1: مختبر النطق",
-    phase2: "المرحلة 2: السرعة والاستدعاء الذهني",
-    targetPhrase: "العبارة المستهدفة",
+    heroDesc: "اجمع بين دقة مخارج الحروف وسرعة التفكير بالإنجليزية.",
+    startBtn: "ابدأ الجلسة اليومية",
+    phase1: "مختبر النطق",
+    phase2: "السرعة والاستدعاء",
+    targetPhrase: "الجملة المستهدفة",
     mechFocus: "التركيز الحركي",
-    recordDrill: "سجل الآن",
+    recordDrill: "سجل التدريب",
     recording: "جاري التسجيل...",
-    stop: "إيقاف التسجيل",
+    stop: "توقف",
     retry: "إعادة المحاولة",
-    analyze: "تحليل الأداء",
+    analyze: "تحليل",
     feedback: "تقرير المدرب",
-    nextPhase: "المرحلة 2: الاستدعاء الذهني",
-    rapidQ: "سؤال سريع",
-    goalSpeed: "الهدف: أقل من 5 ثوانٍ",
-    speedInstruction: "أجب بجملة كاملة فوراً. لا تترجم في عقلك.",
+    nextPhase: "المرحلة التالية",
+    rapidQ: "سؤال سرعة بديهة",
+    goalSpeed: "الهدف: < 5 ثواني",
+    speedInstruction: "أجب بجملة كاملة فوراً.",
     recordAns: "سجل الإجابة",
     analyzeSpeed: "تحليل السرعة",
-    nextRound: "التالي",
+    nextRound: "التدريب التالي",
     readyRecord: "جاهز للتسجيل",
-    readyAns: "جاهز للتسجيل",
+    readyAns: "جاهز للإجابة",
     navHome: "الرئيسية",
-    navDrill: "المختبر",
-    navSettings: "حسابي",
+    navDrill: "تدريبات",
+    navSettings: "الملف الشخصي",
     coach: "المدرب",
-    // Transcription
-    transcribeBtn: "تحويل الكلام لنص",
+    transcribeBtn: "تحويل الصوت لنص",
     transcribeTitle: "النسخ الذكي",
-    transcribeDesc: "حول كلامك إلى نص فوري.",
+    transcribeDesc: "حول كلامك لنص فورا.",
     startTranscribe: "ابدأ التسجيل",
     transcribing: "جاري النسخ...",
-    transcriptionResult: "النص المستخرج",
+    transcriptionResult: "نتيجة النسخ",
     copy: "نسخ النص",
     copied: "تم النسخ!",
     listen: "استمع للمثال",
-    accuracyScore: "دقة المخارج",
-    intonationScore: "التنغيم والنبر",
-    // Modules
-    modMPT: "مختبر النطق",
-    modMuscle: "الذاكرة العضلية",
+    accuracyScore: "الدقة",
+    intonationScore: "النغم",
+    modMPT: "التركيز الحركي",
+    modMuscle: "جيم اللسان",
     modSpeed: "سرعة التفكير",
-    modDescMPT: "التشخيص والصوتيات",
-    modDescMuscle: "جيم للفم واللسان",
+    modStudy: "معمل الدراسة",
+    modVocab: "التأسيس (Zero-G)",
+    modDescMPT: "صوتيات (Phonetics)",
+    modDescMuscle: "إحماء ومحاكاة",
     modDescSpeed: "الاستدعاء الذهني",
-    // Articulation Menu
+    modDescStudy: "حلل أي نص",
+    modDescVocab: "للمبتدئين",
     artMenuTitle: "مختبر النطق",
-    artDiagnostic: "الاختبار التشخيصي",
-    artDiagnosticDesc: "حدد نقاط ضعفك (TH, R/L, V/W) في اختبار واحد.",
+    artDiagnostic: "اختبار تشخيصي",
+    artDiagnosticDesc: "اكتشف نقاط الضعف (TH, R, S).",
     artPairs: "الأزواج الصغرى",
-    artPairsDesc: "عالج الخلط بين P/B, F/V, S/Z.",
-    artDrills: "التمارين الأساسية",
-    artDrillsDesc: "تدرب على الأصوات الرئيسية.",
-    diagnosticText: "Please call Stella. Ask her to bring these things with her from the store: Six spoons of fresh snow peas, five thick slabs of blue cheese, and maybe a snack for her brother Bob. We also need a small plastic snake and a big toy frog for the kids. She can scoop these things into three red bags, and then we will go meet her at the train station.",
-    diagnosticPrompt: "اقرأ النص أدناه بشكل طبيعي. سيقوم الذكاء الاصطناعي بتحليل كل صوت.",
-    diagnosticResult: "نتيجة التشخيص",
-    weaknesses: "نقاط الضعف",
+    artPairsDesc: "عالج خلط الحروف (P/B, F/V).",
+    artDrills: "سيناريوهات",
+    artDrillsDesc: "مواقف واقعية.",
+    artHacking: "اختراق المصطلحات",
+    artHackingDesc: "أتقن مصطلحات النخبة.",
+    diagnosticText: DIAGNOSTIC_TEXT,
+    diagnosticPrompt: "اقرأ النص بالأسفل بشكل طبيعي. الذكاء الاصطناعي سيحلل كل صوت.",
+    diagnosticResult: "نتائج التشخيص",
+    weaknesses: "نقاط الضعف المكتشفة",
     recPlan: "الخطة المقترحة",
     startPlan: "ابدأ الخطة المخصصة",
-    // Muscle Memory
-    muscleMenuTitle: "نادي الذاكرة العضلية",
-    warmupBtn: "تمارين الإحماء",
-    warmupDesc: "تليين الفك واللسان قبل التدريب.",
-    shadowingBtn: "المحاكاة (Visemes)",
-    shadowingDesc: "اسمع، شاهد، وردد فوراً.",
-    gameBtn: "تنشيط ذهني",
-    gameDesc: "لعبة تطابق الذاكرة",
+    muscleMenuTitle: "جيم الذاكرة العضلية",
+    warmupBtn: "دائرة الإحماء",
+    warmupDesc: "تليين الفك واللسان.",
+    shadowingBtn: "محادثة (Shadowing)",
+    shadowingDesc: "محادثة حية مع الذكاء الاصطناعي.",
+    gameBtn: "لعبة ذهنية",
+    gameDesc: "تطابق الذاكرة",
     startWarmup: "ابدأ الإحماء",
-    startShadowing: "ابدأ المحاكاة",
+    startShadowing: "ابدأ المحادثة",
     startGame: "ابدأ اللعبة",
-    nextEx: "التمرين التالي",
-    finishWarmup: "إنهاء الإحماء",
-    shadowingInst: "استمع للصوت، لاحظ شكل الفم، وردد فوراً.",
+    nextEx: "التالي",
+    finishWarmup: "إنهاء",
+    shadowingInst: "استمع، لاحظ، وكرر.",
     visemeGuide: "الدليل البصري",
-    sideView: "منظور جانبي",
-    listenNative: "استمع للنطق الصحيح",
-    backMenu: "القائمة",
-    backHome: "الرئيسية",
-    waveformTitle: "الموجة الصوتية",
-    referenceWave: "النمط المثالي",
-     // Settings
     settingsTitle: "الإعدادات",
-    audioPref: "تفضيلات الصوت",
-    voiceGender: "صوت القارئ",
-    voiceMale: "رجل",
-    voiceFemale: "امرأة",
-    voiceClone: "استنساخ صوتي",
-    comingSoon: "قريباً",
-    playbackSpeed: "سرعة القراءة",
-    speedSlow: "بطيء (0.75x)",
-    speedNormal: "طبيعي (1.0x)",
-    speedFast: "سريع (1.25x)",
-    testVoice: "تجربة الصوت",
     trainingPersona: "شخصية التدريب",
     selectPersona: "اختر الشخصية",
-    savePref: "حفظ الإعدادات",
+    audioPref: "تفضيلات الصوت",
+    engineType: "محرك الصوت",
+    engineBrowser: "المتصفح (سريع)",
+    engineGemini: "جيمناي (واقعي)",
+    voiceGender: "نوع الصوت",
+    voiceMale: "رجل",
+    voiceFemale: "أنثى",
+    playbackSpeed: "سرعة التشغيل",
+    testVoice: "اختبار الصوت",
+    savePref: "حفظ التفضيلات",
     saved: "تم الحفظ!",
-    // Footer
-    footerText: "نظام التدريب المتقدم FluencyFlow AI",
-    footerPrivacy: "الخصوصية",
-    footerStatus: "حالة النظام",
-    footerSettings: "الإعدادات",
-    builtWith: "صُنع بـ ❤️ والذكاء الاصطناعي",
-    // Gamification
-    level: "المستوى",
-    streak: "أيام متتالية",
-    day: "يوم",
-    points: "نقاط",
-    nextLevel: "المستوى التالي",
-    // Game
+    backHome: "عودة للرئيسية",
+    backMenu: "عودة للقائمة",
+    vocabTitle: "التأسيس: Zero-G",
+    vocabDesc: "كلمات أساسية للمبتدئين تماماً.",
+    studyTitle: "معمل الدراسة",
+    studyDesc: "حول أي نص لإنفوجرافيك بصري.",
+    pasteText: "الصق النص هنا...",
     gameTitle: "تطابق الذاكرة",
     moves: "حركات",
     pairs: "أزواج",
-    gameComplete: "اكتمل المستوى!"
+    gameComplete: "اكتملت اللعبة!",
+    level: "مستوى",
+    points: "نقطة",
+    energy: "طاقة",
+    streak: "يوم",
+    listenNative: "استمع للأصلي",
+    referenceWave: "الموجة المثالية",
+    noEnergy: "لا توجد طاقة كافية! انتظر إعادة الشحن."
   }
 };
-
-export const DIAGNOSTIC_TEXT = "Please call Stella. Ask her to bring these things with her from the store: Six spoons of fresh snow peas, five thick slabs of blue cheese, and maybe a snack for her brother Bob. We also need a small plastic snake and a big toy frog for the kids. She can scoop these things into three red bags, and then we will go meet her at the train station.";
-
-export const MINIMAL_PAIRS_DRILLS: DrillContent[] = [
-  {
-    id: 'mp-pb',
-    text: "Pat put a big blue pen back in the bag.",
-    focus: "P (Puff of air) vs B (Vocal vibration)",
-    focusAr: "الفرق بين P (دفعة هواء) و B (اهتزاز الحبال الصوتية)",
-    guide: "Hold a tissue in front of your mouth. It should move for 'Pat/Pen' (P), but NOT for 'Big/Bag' (B).",
-    guideAr: "ضع منديلاً أمام فمك. يجب أن يتحرك عند نطق 'Pat' (هواء)، ولكن لا يتحرك عند 'Bag' (اهتزاز).",
-    type: 'MINIMAL_PAIR',
-    category: 'general',
-    viseme: 'p'
-  },
-  {
-    id: 'mp-fv',
-    text: "Five fans view the vast valley.",
-    focus: "F (Air only) vs V (Buzzing)",
-    focusAr: "الفرق بين F (هواء فقط) و V (أزيز/اهتزاز)",
-    guide: "Top teeth on bottom lip for BOTH. 'F' is just air. 'V' makes your lip tickle/buzz.",
-    guideAr: "الأسنان العلوية على الشفة السفلية للاثنين. 'F' مجرد هواء. 'V' يجب أن تشعر بدغدغة في شفتك.",
-    type: 'MINIMAL_PAIR',
-    category: 'general',
-    viseme: 'f'
-  },
-  {
-    id: 'mp-sz',
-    text: "Sue sees the zoo zebra.",
-    focus: "S (Snake hiss) vs Z (Bee buzz)",
-    focusAr: "الفرق بين S (فحيح الأفعى) و Z (طنين النحلة)",
-    guide: "Tongue touches nothing. 'S' is whispered. 'Z' vibrates your throat.",
-    guideAr: "اللسان لا يلمس شيئاً. 'S' هو همس. 'Z' يجعل حنجرتك تهتز.",
-    type: 'MINIMAL_PAIR',
-    category: 'general',
-    viseme: 's'
-  }
-];
-
-export const PRONUNCIATION_DRILLS: DrillContent[] = [
-  // --- BUSINESS PERSONA DRILLS ---
-  {
-    id: 'bus-1',
-    text: "Let's touch base offline regarding the quarterly deliverables.",
-    focus: "Clear enunciation of multi-syllable words (Deliverables)",
-    focusAr: "نطق واضح للكلمات متعددة المقاطع",
-    guide: "Focus on the 'L' in deliverables and the 'S' at the end.",
-    guideAr: "ركز على حرف L في deliverables وحرف S في النهاية.",
-    category: 'business',
-    type: 'STANDARD',
-    viseme: 'l'
-  },
-  {
-    id: 'bus-2',
-    text: "We need to leverage our strategic advantages.",
-    focus: "V vs W (Leverage), Str- cluster (Strategic)",
-    focusAr: "الفرق بين V/W ومخارج Str",
-    guide: "Bite lip for 'Leverage'. Strong 'R' in Strategic.",
-    guideAr: "عض الشفة في Leverage. نطق R قوي في Strategic.",
-    category: 'business',
-    type: 'STANDARD',
-    viseme: 'f'
-  },
-
-  // --- DEVELOPER PERSONA DRILLS ---
-  {
-    id: 'dev-1',
-    text: "I need to debug this asynchronous function before deployment.",
-    focus: "Hard G (Debug), S-clusters (Async, Deploy)",
-    focusAr: "حرف G القوي (Debug) ومخارج S",
-    guide: "Don't rush 'Asynchronous'. Pronounce every syllable: A-syn-chro-nous.",
-    guideAr: "لا تتسرع في Asynchronous. انطق كل مقطع.",
-    category: 'developer',
-    type: 'STANDARD',
-    viseme: 'p'
-  },
-  {
-    id: 'dev-2',
-    text: "The API latency is causing a bottleneck in the backend.",
-    focus: "Acronyms (API), T sounds (Latency, Bottle)",
-    focusAr: "الاختصارات (API) وحرف T",
-    guide: "Say 'A-P-I' clearly. 'Bottleneck' has a sharp T (or glottal stop).",
-    guideAr: "قل A-P-I بوضوح. Bottleneck بها T حادة.",
-    category: 'developer',
-    type: 'STANDARD',
-    viseme: 'p'
-  },
-
-  // --- ACADEMIC PERSONA DRILLS ---
-  {
-    id: 'aca-1',
-    text: "The hypothesis was validated by empirical data.",
-    focus: "TH (Hypothesis), V (Validated), P (Empirical)",
-    focusAr: "مخارج TH, V, P",
-    guide: "Soft TH in Hypothesis. Explode the P in Empirical.",
-    guideAr: "TH ناعمة في Hypothesis. فجر حرف P في Empirical.",
-    category: 'academic',
-    type: 'STANDARD',
-    viseme: 'th'
-  },
-  {
-    id: 'aca-2',
-    text: "Significant correlation does not imply causation.",
-    focus: "S/Z sounds, Tion endings",
-    focusAr: "أصوات S/Z ونهايات Tion",
-    guide: "Sharp 'S' sounds. 'Tion' sounds like 'Shun'.",
-    guideAr: "أصوات S حادة. Tion تنطق Shun.",
-    category: 'academic',
-    type: 'STANDARD',
-    viseme: 's'
-  },
-
-  // --- KIDS PERSONA DRILLS ---
-  {
-    id: 'kid-1',
-    text: "The fluffy cat jumped over the moon.",
-    focus: "F (Fluffy), J (Jumped)",
-    focusAr: "حرف F وحرف J",
-    guide: "Blow air like a bunny for Fluffy. Jump your jaw for Jumped!",
-    guideAr: "انفخ الهواء مثل الأرنب في Fluffy. حرك فكك بقوة في Jumped.",
-    category: 'kids',
-    type: 'STANDARD',
-    viseme: 'f'
-  },
-  {
-    id: 'kid-2',
-    text: "Sally sells seashells by the seashore.",
-    focus: "S vs SH (The Snake and the Quiet Sound)",
-    focusAr: "الفرق بين S و SH",
-    guide: "Smile for S (Sally). Pucker lips for SH (Shells).",
-    guideAr: "ابتسم لحرف S. ضم شفتيك لحرف SH.",
-    category: 'kids',
-    type: 'STANDARD',
-    viseme: 's'
-  },
-
-  // --- GENERAL DRILLS ---
-  {
-    id: 'th-1',
-    text: "Thinking about those three things.",
-    focus: "TH Sound (Voiceless & Voiced)",
-    focusAr: "صوت الـ TH (المهموس والمجهور)",
-    guide: "Stick your tongue OUT between your teeth. Bite it gently.",
-    guideAr: "أخرج طرف لسانك بين أسنانك وعضه بلطف.",
-    type: 'STANDARD',
-    category: 'general',
-    viseme: 'th'
-  },
-  {
-    id: 'rl-1',
-    text: "The red lorry rolled down the yellow lane.",
-    focus: "R (Retroflex) vs L (Alveolar)",
-    focusAr: "الفرق بين R (اللسان للخلف) و L (اللسان للأمام)",
-    guide: "For 'R': Curl tongue BACK. For 'L': Tip of tongue touches behind teeth.",
-    guideAr: "لحرف R: لف لسانك للخلف. لحرف L: طرف اللسان يلمس خلف الأسنان.",
-    type: 'STANDARD',
-    category: 'general',
-    viseme: 'r'
-  }
-];
-
-export const SPEED_QUESTIONS: SpeedQuestion[] = [
-  // GENERAL
-  { id: 'sq-1', question: "What is the last thing you bought and why?", questionAr: "ما هو آخر شيء اشتريته ولماذا؟", category: 'general' },
-  { id: 'sq-2', question: "Describe your morning routine in three sentences.", questionAr: "صف روتينك الصباحي في ثلاث جمل.", category: 'general' },
-  
-  // BUSINESS
-  { id: 'sq-bus-1', question: "How would you handle a missed deadline?", questionAr: "كيف تتصرف إذا فاتك موعد نهائي؟", category: 'business' },
-  { id: 'sq-bus-2', question: "Pitch your current project in 10 seconds.", questionAr: "اعرض مشروعك الحالي في 10 ثوانٍ.", category: 'business' },
-
-  // DEVELOPER
-  { id: 'sq-dev-1', question: "Explain the difference between SQL and NoSQL.", questionAr: "اشرح الفرق بين SQL و NoSQL.", category: 'developer' },
-  { id: 'sq-dev-2', question: "How do you handle a serious bug in production?", questionAr: "كيف تتعامل مع خطأ برمجي خطير في الإنتاج؟", category: 'developer' },
-
-  // ACADEMIC
-  { id: 'sq-aca-1', question: "Summarize the main argument of the last article you read.", questionAr: "لخص الحجة الرئيسية لآخر مقال قرأته.", category: 'academic' },
-  
-  // KIDS
-  { id: 'sq-kid-1', question: "If you could have any superpower, what would it be?", questionAr: "لو كان عندك قوة خارقة، ماذا ستكون؟", category: 'kids' },
-  { id: 'sq-kid-2', question: "Tell me about your favorite animal.", questionAr: "اخبرني عن حيوانك المفضل.", category: 'kids' }
-];
-
-export const WARMUP_EXERCISES: WarmupExercise[] = [
-  {
-    id: 'w-1',
-    title: "The Jaw Drop",
-    titleAr: "تمرين الفك",
-    instruction: "Place palms on cheeks. Massage gently. Open mouth wide (say 'Ahhh') and close slowly. Repeat.",
-    instructionAr: "ضع راحة يدك على خديك. دلك بلطف. افتح فمك واسعاً (قل 'آآآه') وأغلقه ببطء. كرر.",
-    duration: 15,
-    icon: 'jaw'
-  },
-  {
-    id: 'w-2',
-    title: "Lip Trills",
-    titleAr: "ارتجاف الشفاه",
-    instruction: "Relax your lips and blow air through them to make a 'Brrr' sound like a horse. Keep the vibration steady.",
-    instructionAr: "ارخِ شفتيك وانفخ الهواء خلالهما لتصدر صوت 'بررر' (مثل الحصان). حافظ على ثبات الاهتزاز.",
-    duration: 15,
-    icon: 'lips'
-  },
-  {
-    id: 'w-3',
-    title: "Tongue Circles",
-    titleAr: "دوائر اللسان",
-    instruction: "Push your tongue into your cheek. Move it in a circle between your teeth and lips. 5 times clockwise, 5 counter-clockwise.",
-    instructionAr: "ادفع لسانك داخل خدك. حركه في دائرة بين أسنانك وشفتيك. 5 مرات مع عقارب الساعة و 5 عكسها.",
-    duration: 20,
-    icon: 'tongue'
-  },
-  {
-    id: 'w-4',
-    title: "The 'Q-X' Stretch",
-    titleAr: "تمرين Q-X",
-    instruction: "Say 'Q' (pucker lips tight) then 'X' (smile extremely wide). Alternate rapidly.",
-    instructionAr: "قل 'Q' (ضم شفتيك بقوة) ثم 'X' (ابتسم باتساع شديد). بدل بينهما بسرعة.",
-    duration: 15,
-    icon: 'lips'
-  }
-];
-
-export const SHADOWING_DRILLS: ShadowingContent[] = [
-  {
-    id: 'sh-1',
-    text: "The thirty-three thieves thought that they thrilled the throne throughout Thursday.",
-    visemeFocus: 'th',
-    guide: "Stick tongue OUT past teeth.",
-    guideAr: "أخرج لسانك خارج الأسنان."
-  },
-  {
-    id: 'sh-2',
-    text: "Red lorry, yellow lorry, red lorry, yellow lorry.",
-    visemeFocus: 'r',
-    guide: "Curl tongue BACK, lips square.",
-    guideAr: "لف اللسان للخلف، الشفاه مربعة."
-  },
-  {
-    id: 'sh-3',
-    text: "Fresh fried fish, fish fresh fried, fried fish fresh, fish fried fresh.",
-    visemeFocus: 'f',
-    guide: "Top teeth on bottom lip.",
-    guideAr: "الأسنان العلوية على الشفة السفلية."
-  },
-  {
-    id: 'sh-4',
-    text: "She sells seashells by the seashore.",
-    visemeFocus: 's',
-    guide: "Tongue behind teeth, lips spread.",
-    guideAr: "اللسان خلف الأسنان، الشفاه مفرودة."
-  }
-];
-
-export const GAME_WORDS = [
-  { id: 'g1', word: 'Thorough', match: 'Careful', type: 'meaning' },
-  { id: 'g2', word: 'Rough', match: 'Not Smooth', type: 'meaning' },
-  { id: 'g3', word: 'Though', match: 'Although', type: 'meaning' },
-  { id: 'g4', word: 'Thought', match: 'Idea', type: 'meaning' },
-];

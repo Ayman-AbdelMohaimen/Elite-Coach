@@ -19,10 +19,11 @@ interface Props {
   lang: 'en' | 'ar';
   onBack: () => void;
   onStartPlan: () => void;
+  onUpdateStats: (xp: number) => void;
 }
 
 export const DiagnosticView: React.FC<Props> = ({ 
-  t, sessionState, setSessionState, audioRecorder, setShowReward, onPlayTTS, isPlayingTTS, lang, onBack, onStartPlan 
+  t, sessionState, setSessionState, audioRecorder, setShowReward, onPlayTTS, isPlayingTTS, lang, onBack, onStartPlan, onUpdateStats 
 }) => {
   const [result, setResult] = useState<DiagnosticResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -36,6 +37,9 @@ export const DiagnosticView: React.FC<Props> = ({
       const res = await analyzeDiagnostic(base64, audioRecorder.audioBlob.type, lang);
       setResult(res);
       setSessionState(SessionState.DIAGNOSTIC_RESULT);
+      
+      // Update Stats
+      onUpdateStats(100); // Big reward for diagnostic
       setShowReward(true);
     } catch (e) { console.error(e); }
     setIsAnalyzing(false);

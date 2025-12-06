@@ -9,16 +9,19 @@ export enum SessionState {
   DIAGNOSTIC_PROCESSING = 'DIAGNOSTIC_PROCESSING',
   DIAGNOSTIC_RESULT = 'DIAGNOSTIC_RESULT',
   
+  // Keyword Hacking States
+  KEYWORD_MENU = 'KEYWORD_MENU',
+  KEYWORD_DRILL = 'KEYWORD_DRILL',
+  KEYWORD_SUCCESS = 'KEYWORD_SUCCESS',
+  
   // Muscle Memory States
   MUSCLE_MENU = 'MUSCLE_MENU',
   WARMUP_INTRO = 'WARMUP_INTRO',
   WARMUP_ACTIVE = 'WARMUP_ACTIVE',
   WARMUP_COMPLETED = 'WARMUP_COMPLETED',
   SHADOWING_INTRO = 'SHADOWING_INTRO',
-  SHADOWING_RECORDING = 'SHADOWING_RECORDING',
-  SHADOWING_PROCESSING = 'SHADOWING_PROCESSING',
-  SHADOWING_FEEDBACK = 'SHADOWING_FEEDBACK',
-
+  SHADOWING_CHAT = 'SHADOWING_CHAT', // Changed from generic recording
+  
   // Drill States (Shared)
   DRILL_INTRO = 'DRILL_INTRO',
   DRILL_RECORDING = 'DRILL_RECORDING',
@@ -37,6 +40,15 @@ export enum SessionState {
   TRANSCRIPTION_PROCESSING = 'TRANSCRIPTION_PROCESSING',
   TRANSCRIPTION_RESULT = 'TRANSCRIPTION_RESULT',
   
+  // Study Lab States
+  STUDY_LAB_INTRO = 'STUDY_LAB_INTRO',
+  STUDY_LAB_ANALYSIS = 'STUDY_LAB_ANALYSIS',
+  STUDY_LAB_PRACTICE = 'STUDY_LAB_PRACTICE',
+  
+  // Vocab/Foundations States (NEW)
+  VOCAB_MENU = 'VOCAB_MENU',
+  VOCAB_DRILL = 'VOCAB_DRILL',
+
   // Game States
   GAME_INTRO = 'GAME_INTRO',
   GAME_ACTIVE = 'GAME_ACTIVE',
@@ -46,7 +58,7 @@ export enum SessionState {
 }
 
 export type UserPersona = 'business' | 'developer' | 'academic' | 'kids';
-export type VisemeType = 'th' | 'r' | 'f' | 'l' | 's' | 'p' | 'w';
+export type VisemeType = 'th' | 'r' | 'l' | 'f' | 's' | 'p' | 'w';
 
 export interface FeedbackData {
   rawText: string;
@@ -62,14 +74,51 @@ export interface DiagnosticResult {
 
 export interface DrillContent {
   id: string;
+  title?: string;
+  titleAr?: string;
   text: string;
   focus: string;
-  focusAr?: string; // Arabic translation
+  focusAr?: string;
   guide: string;
-  guideAr?: string; // Arabic translation
+  guideAr?: string;
   type?: 'STANDARD' | 'MINIMAL_PAIR';
   category?: UserPersona | 'general';
   viseme?: VisemeType;
+}
+
+export interface KeywordChallenge {
+  id: string;
+  word: string;
+  phonetics: string;
+  definition: string;
+  definitionAr: string;
+  context: string;
+  contextAr: string;
+  difficulty: 'Elite' | 'Master' | 'Legend';
+}
+
+export interface VocabWord {
+  id: string;
+  text: string;
+  translation: string;
+  emoji: string;
+}
+
+export interface VocabCategory {
+  id: string;
+  title: string;
+  titleAr: string;
+  icon: string;
+  words: VocabWord[];
+}
+
+export interface StudyLabResult {
+  segments: {
+    text: string;
+    difficulty: 'Easy' | 'Medium' | 'Hard';
+    focus: string;
+  }[];
+  overallFeedback: string;
 }
 
 export interface SpeedQuestion {
@@ -85,7 +134,7 @@ export interface WarmupExercise {
   titleAr?: string;
   instruction: string;
   instructionAr?: string;
-  duration: number; // seconds
+  duration: number;
   icon: 'jaw' | 'tongue' | 'lips' | 'breath';
 }
 
@@ -101,7 +150,9 @@ export interface UserStats {
   xp: number;
   streak: number;
   level: number;
-  lastTrainingDate: string | null; // ISO Date string
+  lastTrainingDate: string | null;
+  energy: number;
+  maxEnergy: number;
 }
 
 export interface Badge {
@@ -109,4 +160,18 @@ export interface Badge {
   label: string;
   icon: string;
   unlocked: boolean;
+}
+
+export interface AvatarConfig {
+  style: 'avataaars' | 'bottts' | 'fun-emoji';
+  seed: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  sender: 'ai' | 'user';
+  text?: string;
+  audioUrl?: string;
+  type: 'text' | 'audio';
+  timestamp: number;
 }

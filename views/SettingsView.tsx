@@ -1,17 +1,20 @@
 
 import React, { useState } from 'react';
-import { Settings, Sliders, User, Gauge, Volume2, Save, Check } from 'lucide-react';
+import { Settings, Sliders, User, Gauge, Volume2, Save, Check, Zap, Cpu } from 'lucide-react';
 import { Button } from '../components/Button';
 import { PERSONAS } from '../constants';
 import { UserPersona } from '../types';
 
 interface SettingsViewProps {
   t: any;
+  lang: 'en' | 'ar';
   ttsGender: 'male' | 'female';
   ttsSpeed: number;
+  ttsEngine: 'browser' | 'gemini';
   selectedPersona: UserPersona | null;
   onSetGender: (g: 'male' | 'female') => void;
   onSetSpeed: (s: number) => void;
+  onSetEngine: (e: 'browser' | 'gemini') => void;
   onSetPersona: (p: UserPersona) => void;
   onTestVoice: () => void;
   onHome: () => void;
@@ -19,14 +22,14 @@ interface SettingsViewProps {
 }
 
 export const SettingsView: React.FC<SettingsViewProps> = ({ 
-  t, ttsGender, ttsSpeed, selectedPersona, onSetGender, onSetSpeed, onSetPersona, onTestVoice, onHome, isPlayingTTS 
+  t, lang, ttsGender, ttsSpeed, ttsEngine, selectedPersona, onSetGender, onSetSpeed, onSetEngine, onSetPersona, onTestVoice, onHome, isPlayingTTS 
 }) => {
   const [isSaved, setIsSaved] = useState(false);
 
   const handleSave = () => {
-    // Persist to localStorage
     localStorage.setItem('fluency_gender', ttsGender);
     localStorage.setItem('fluency_speed', ttsSpeed.toString());
+    localStorage.setItem('fluency_engine', ttsEngine);
     if (selectedPersona) localStorage.setItem('fluency_persona', selectedPersona);
     
     setIsSaved(true);
@@ -54,7 +57,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             >
               <option value="" disabled>{t.selectPersona}</option>
               {PERSONAS.map(p => (
-                <option key={p.id} value={p.id}>{p.labelAr || p.label}</option>
+                <option key={p.id} value={p.id}>{lang === 'ar' ? p.labelAr : p.label}</option>
               ))}
             </select>
          </div>
@@ -65,6 +68,33 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
          </div>
 
          <div className="space-y-8">
+           
+           {/* Audio Engine */}
+           <div>
+             <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-3">{t.engineType}</label>
+             <div className="grid grid-cols-2 gap-3">
+               <button 
+                  onClick={() => onSetEngine('browser')}
+                  className={`flex flex-col items-center justify-center px-4 py-4 rounded-xl border transition-all gap-2 ${ttsEngine === 'browser' 
+                    ? 'bg-cyan-500/10 border-cyan-500 text-cyan-600 dark:text-cyan-400 font-bold ring-2 ring-cyan-500/20' 
+                    : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+               >
+                 <Zap className="w-5 h-5" /> 
+                 <span className="text-xs">{t.engineBrowser}</span>
+               </button>
+               
+               <button 
+                  onClick={() => onSetEngine('gemini')}
+                  className={`flex flex-col items-center justify-center px-4 py-4 rounded-xl border transition-all gap-2 ${ttsEngine === 'gemini' 
+                    ? 'bg-purple-500/10 border-purple-500 text-purple-600 dark:text-purple-400 font-bold ring-2 ring-purple-500/20' 
+                    : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+               >
+                 <Cpu className="w-5 h-5" /> 
+                 <span className="text-xs">{t.engineGemini}</span>
+               </button>
+             </div>
+           </div>
+
            {/* Voice Gender */}
            <div>
              <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-3">{t.voiceGender}</label>
@@ -98,7 +128,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                     key={s}
                     onClick={() => onSetSpeed(s)}
                     className={`flex items-center justify-center px-4 py-3 rounded-xl border transition-all ${ttsSpeed === s 
-                      ? 'bg-cyan-500/10 border-cyan-500 text-cyan-600 dark:text-cyan-400 font-bold ring-2 ring-cyan-500/20' 
+                      ? 'bg-slate-200 dark:bg-slate-700 border-slate-400 text-slate-900 dark:text-white font-bold' 
                       : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
                  >
                    <Gauge className="w-4 h-4 mr-2" /> {s}x

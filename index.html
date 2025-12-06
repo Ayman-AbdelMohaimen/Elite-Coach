@@ -22,6 +22,7 @@
               'float': 'float 6s ease-in-out infinite',
               'burst': 'burst 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards',
               'float-up': 'float-up 1s ease-out forwards',
+              'glow': 'glow 2s ease-in-out infinite alternate',
             },
             keyframes: {
               float: {
@@ -35,6 +36,10 @@
               'float-up': {
                 '0%': { transform: 'translateY(20px)', opacity: '0' },
                 '100%': { transform: 'translateY(0)', opacity: '1' }
+              },
+              glow: {
+                'from': { boxShadow: '0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073' },
+                'to': { boxShadow: '0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6' }
               }
             },
             colors: {
@@ -58,7 +63,9 @@
     "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0"
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "pdfjs-dist": "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/+esm",
+    "pdfjs-dist/": "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/"
   }
 }
 </script>

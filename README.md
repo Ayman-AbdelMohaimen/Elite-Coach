@@ -1,90 +1,120 @@
 
-# FluencyFlow | Elite AI Accent & Fluency Coach
+# 🌊 FluencyFlow: Elite AI Accent Coach v3.1
 
-**FluencyFlow** is an advanced AI-powered language coaching application designed to bridge the gap between knowing English and speaking it like a native. Unlike standard language apps that focus on vocabulary, FluencyFlow focuses on **Bio-mechanics (Articulation)**, **Muscle Memory**, and **Cognitive Recall Speed**.
+> **Master the Art of Speech.**  
+> An advanced, AI-powered language coaching platform designed to bridge the gap between knowing English and speaking it like a native.
 
----
+![Version](https://img.shields.io/badge/version-3.1.0-emerald)
+![Tech Stack](https://img.shields.io/badge/stack-React_19_|_TypeScript_|_Vite-blue)
+![AI Engine](https://img.shields.io/badge/AI-Google_Gemini_2.5-orange)
 
-## 🚀 Project Overview & Achievements
+## 📖 Overview
 
-We have built a sophisticated React application fully integrated with Google's **Gemini 2.5 Flash API** to provide real-time, multimodal feedback.
+**FluencyFlow** is not just a language learning app; it is a **Bio-mechanical & Cognitive Training System**. Unlike traditional apps that focus on vocabulary, FluencyFlow targets the physical muscles of the mouth (Articulation) and the speed of neural recall (Cognitive Speed).
 
-### 🌟 Core Features Implemented
-
-#### 1. Dual-Language & RTL Support
-*   **Complete Localization**: The app is fully translated into English and Arabic.
-*   **Adaptive Layout**: The UI automatically switches between LTR (Left-to-Right) and RTL (Right-to-Left) layouts, including directional icons (arrows, players), ensuring a native experience for Arab users.
-*   **Theming**: Toggleable Dark/Light modes with persistent state.
-
-#### 2. Phase 1: Articulation Lab (The Mechanics)
-*   **AI Diagnostic Test**: Uses the standardized "Please call Stella" script. Gemini analyzes the audio to detect specific phonological weaknesses (TH sounds, R/L confusion, etc.) and generates a customized training plan.
-*   **Minimal Pairs**: specialized drills for distinguishing similar sounds (P/B, F/V, S/Z) with physical "Focus" guides.
-*   **Standard Drills**: Targeted sentences with detailed articulation instructions (e.g., "Tongue placement," "Vibration check").
-*   **Gemini Analysis**: Returns a structured JSON response containing:
-    *   Phonetic Accuracy Score (0-100).
-    *   Intonation & Stress Score (0-100).
-    *   Detailed Markdown feedback on physical mistakes.
-
-#### 3. Phase 2: Muscle Memory Gym
-*   **Warm-up Circuit**: A guided physical routine (Jaw Drop, Lip Trills, Tongue Circles) with animated countdown timers and instructional icons to prepare the articulators before speaking.
-*   **Shadowing & Visemes**:
-    *   **Visual Guide (SVG)**: A dynamic, anatomically correct SVG animation showing the side profile of the mouth/tongue position for specific sounds (TH, R, F, L).
-    *   **Rhythm Analysis**: Feedback focuses on flow and speed rather than just pronunciation.
-
-#### 4. Phase 3: Cognitive Recall (Speed)
-*   **Rapid Fire Questions**: Evaluates the user's "Thinking Speed."
-*   **Constraint**: Users must answer in full sentences under time pressure.
-*   **Analysis**: Detects hesitation (translation gap) and grammar issues.
-
-#### 5. Audio & Visualization
-*   **Audio Recorder**: Custom hook (`useAudioRecorder`) managing browser permissions, Blob creation, and Base64 conversion for API transport.
-*   **Waveform Visualizer**: A Canvas-based component (`AudioVisualizer`) that draws the user's audio pattern.
-    *   **Comparison**: Displays a "Target Reference" pattern above the user's wave.
-    *   **Color-Coded**: The waveform changes color (Red/Yellow/Green) based on the AI confidence score.
-*   **Text-to-Speech (TTS)**: Integrated browser synthesis to read drills before recording.
-
-#### 6. Settings & Customization
-*   **Voice Selection**: Users can choose between Male and Female voices.
-    *   *Logic*: Smart filtering attempts to find "David/Mark" for Male or "Zira/Google US" for Female, falling back gracefully.
-*   **Speed Control**: Playback speed adjustment (0.75x, 1.0x, 1.25x) for practicing difficult phrases.
+Built with **React 19**, **TypeScript**, and the **Google GenAI SDK**, it provides real-time, multimodal feedback on pronunciation, intonation, and fluency.
 
 ---
 
-## 🛠 Technical Architecture
+## 🌟 Key Features
 
-*   **Frontend**: React 19, TypeScript, Vite.
-*   **Styling**: Tailwind CSS (with extensive custom animations for "breathing" and "floating" effects).
-*   **AI Engine**: `@google/genai` SDK (Gemini 2.5 Flash).
-    *   *Prompt Engineering*: Highly specific system instructions (`COACH_PERSONA`) ensuring the AI acts as a strict but encouraging dialect coach.
-    *   *Structured Output*: Using JSON Schema enforcement to guarantee UI-compatible data from the LLM.
-*   **Icons**: Lucide React.
+### 1. 🧬 The Persona System (Adaptive Curriculum)
+The app adapts its entire content database based on the user's professional profile:
+- **Developer 👨‍💻**: Drills focusing on tech terms (*Kubernetes, Latency, Idempotency*).
+- **Business 👔**: Drills for negotiation and strategy (*ROI, Synergy, Leverage*).
+- **Academic 🎓**: Drills for research and logic (*Methodology, Correlation*).
+- **Kids 🦁**: Fun, adventure-based drills.
 
----
+### 2. 🗣️ Articulation Lab
+- **AI Diagnostic**: Analyzes the "Please Call Stella" script to detect phonological weaknesses.
+- **Minimal Pairs**: Targeted practice for confusing sounds (P/B, F/V).
+- **Elite Keyword Hacking**: A "Terminal-style" module for mastering the hardest technical terms in your niche.
 
-## 🔮 Roadmap: Coming Soon
+### 3. 💪 Muscle Gym
+- **Warm-up Circuit**: Guided physical exercises (Jaw drops, Lip trills) to prepare articulators.
+- **Shadowing**: Rhythm and flow training with visual guides.
+- **Memory Game**: Cognitive warm-up to activate English thinking centers.
 
-Based on recent brainstorming sessions, the following "Elite" features are planned for the next iteration:
+### 4. ⚡ Speed Drill (Cognitive Recall)
+- **Rapid Fire**: Users must answer questions in under 5 seconds.
+- **Analysis**: Detects "Translation Gap" (hesitation due to thinking in native language).
 
-### 1. Native Neural TTS (Gemini Integration)
-*   **Current Issue**: Browser-based `speechSynthesis` is robotic and inconsistent across devices (Male voice often defaults to Female on some mobiles).
-*   **Solution**: Migrate `playTextToSpeech` to use **Gemini API's Text-to-Speech**.
-*   **Benefit**: Access to high-quality, human-like voices (Puck, Fenrir for Male / Kore, Aoede for Female) ensuring consistent "Native" audio references.
-
-### 2. User Voice Cloning (The "Magic" Feature)
-A revolutionary feature allowing users to hear *themselves* speaking fluently.
-
-*   **Concept**:
-    1.  **Calibration**: User records a 30-second sample in the Settings menu.
-    2.  **Cloning**: The system creates a digital voice profile.
-    3.  **Feedback Loop**: When a user fails a drill, they can click "Hear it in MY voice."
-    4.  **Result**: The app plays the target sentence using the user's own voice clone, but with perfect native accent and intonation.
-*   **Tech Path**:
-    *   *Path A*: Gemini Speech-to-Speech (Style Transfer).
-    *   *Path B*: Integration with **ElevenLabs API** (Instant Voice Cloning) for maximum realism.
-
-### 3. Intonation Visualization (Pitch Perfect)
-*   Visualizing the "Melody" of speech (Pitch contours) overlaying the user's recording against a native speaker's pitch curve to visually correct "Robotic" speech.
+### 5. 🧪 Study Lab (Visual Context)
+- **Text-to-Infographic**: Paste any text, and the AI (Gemini 2.5) generates a visual summary poster to help you learn the context visually.
 
 ---
 
-*English Doctor v3.1 - Built with ❤️ By Ayman AbdelMohaimen & AI.*
+## 🛠️ Technical Architecture
+
+### Tech Stack
+- **Frontend Framework**: React 19 (Functional Components, Hooks).
+- **Build Tool**: Vite.
+- **Language**: TypeScript (Strict Mode).
+- **Styling**: Tailwind CSS (Custom "Glassmorphism" & "Neon" theme).
+- **AI Integration**: `@google/genai` (Gemini 1.5/2.5 Flash Models).
+- **Audio**: Native Web Audio API + MediaRecorder API.
+- **Visuals**: HTML5 Canvas (Waveforms) + SVG (Viseme Guides).
+
+### Project Structure
+```bash
+src/
+├── components/       # Reusable UI components (Buttons, AudioPlayer, Header)
+├── hooks/            # Custom Hooks (useAudioRecorder, useGeminiTTS)
+├── services/         # API Layer (Gemini integration logic)
+├── views/            # Main Application Screens (Home, Articulation, etc.)
+├── types.ts          # TypeScript Interfaces & Enums (SessionState, UserStats)
+├── constants.ts      # Static Data (Drills, Personas, Translations)
+└── App.tsx           # Main Router & State Manager
+```
+
+### Core Logic Flow
+1.  **State Management**: The app uses a global `SessionState` enum to manage navigation without client-side routing libraries, ensuring seamless transitions (SPA).
+2.  **Audio Pipeline**:
+    -   `useAudioRecorder`: Captures microphone input -> Converts to Blob -> Converts to Base64.
+    -   `geminiService`: Sends Base64 audio + System Prompt to Gemini API.
+    -   `Response`: Gemini returns JSON containing Score (0-100) and Markdown feedback.
+3.  **Localization**: Fully supports RTL (Arabic) via a custom `lang` prop passed down to all components.
+
+---
+
+## 🚀 Installation & Setup
+
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/your-username/fluency-flow.git
+    cd fluency-flow
+    ```
+
+2.  **Install Dependencies**
+    ```bash
+    npm install
+    ```
+
+3.  **Environment Setup**
+    -   Create a `.env` file in the root directory.
+    -   Add your Google Gemini API Key:
+    ```env
+    VITE_API_KEY=your_google_gemini_api_key_here
+    ```
+
+4.  **Run Development Server**
+    ```bash
+    npm run dev
+    ```
+
+---
+
+## 🔒 Security Note (Important)
+
+This is a **Client-Side Application**. The API Key is currently exposed in the frontend code for demonstration/hackathon purposes.
+**For Production:**
+1.  Migrate the `services/geminiService.ts` logic to a Backend (Node.js/Express or Firebase Functions).
+2.  Use a proxy endpoint to hide the `API_KEY`.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+**Built with ❤️ by Ayman AbdelMohaimen & AI.**
